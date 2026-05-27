@@ -6,5 +6,8 @@
         "file": "contracts/prac1.sol"
       }
     }
+  },
+  "contracts/prac2.sol": {
+    "__sources__": {}
   }
 }
