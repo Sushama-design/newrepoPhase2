@@ -83,7 +83,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/prac19.sol": "ModifyMemoryArray"
+			"contracts/prac20.sol": "ModifyMemoryArray"
 		},
 		"evmVersion": "osaka",
 		"libraries": {},
@@ -97,7 +97,7 @@
 		"remappings": []
 	},
 	"sources": {
-		"contracts/prac19.sol": {
+		"contracts/prac20.sol": {
 			"keccak256": "0x426c0895ed9a87252751903b710182ca4361ef0e656cf9706c46bab9da5360a3",
 			"license": "MIT",
 			"urls": [
