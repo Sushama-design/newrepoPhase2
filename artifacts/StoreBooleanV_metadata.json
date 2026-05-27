@@ -7,12 +7,12 @@
 		"abi": [
 			{
 				"inputs": [],
-				"name": "getNumber",
+				"name": "getStatus",
 				"outputs": [
 					{
-						"internalType": "uint256",
+						"internalType": "bool",
 						"name": "",
-						"type": "uint256"
+						"type": "bool"
 					}
 				],
 				"stateMutability": "view",
@@ -20,12 +20,12 @@
 			},
 			{
 				"inputs": [],
-				"name": "number",
+				"name": "isActive",
 				"outputs": [
 					{
-						"internalType": "uint256",
+						"internalType": "bool",
 						"name": "",
-						"type": "uint256"
+						"type": "bool"
 					}
 				],
 				"stateMutability": "view",
@@ -34,12 +34,12 @@
 			{
 				"inputs": [
 					{
-						"internalType": "uint256",
-						"name": "_newNumber",
-						"type": "uint256"
+						"internalType": "bool",
+						"name": "_status",
+						"type": "bool"
 					}
 				],
-				"name": "updateNumber",
+				"name": "setStatus",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -58,7 +58,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/prac2.sol": "StateOverwriteVul"
+			"contracts/prac4.sol": "StoreBooleanV"
 		},
 		"evmVersion": "osaka",
 		"libraries": {},
@@ -72,12 +72,12 @@
 		"remappings": []
 	},
 	"sources": {
-		"contracts/prac2.sol": {
-			"keccak256": "0xea0839fc680224d2cc663f61b3a66d85867fe723143b17ff2c76352ca294128d",
+		"contracts/prac4.sol": {
+			"keccak256": "0xd974ed73319e5061c0cf454bc59a783679cbbb3da56573dfb53ad5b234156752",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://09e0f22b2f0547e76dde3aa1566779d642d3cb5515bcda62822cddd30cb76215",
-				"dweb:/ipfs/QmWNpjvYqr4U823SS4pxueoWFFaczksUzuopkdbUnNsDNk"
+				"bzz-raw://78cf86b3e5ad4fa81cb907c84981f64110daca26c530369b64fd767b3f934ae3",
+				"dweb:/ipfs/QmaEXYzdVBBPumZhzMkR7QkwZxroSHEJh8KMxGNEsXXuvC"
 			]
 		}
 	},

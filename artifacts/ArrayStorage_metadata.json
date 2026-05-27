@@ -6,21 +6,21 @@
 	"output": {
 		"abi": [
 			{
-				"inputs": [],
-				"name": "getNumber",
-				"outputs": [
+				"inputs": [
 					{
 						"internalType": "uint256",
-						"name": "",
+						"name": "_number",
 						"type": "uint256"
 					}
 				],
-				"stateMutability": "view",
+				"name": "addNumber",
+				"outputs": [],
+				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
 				"inputs": [],
-				"name": "number",
+				"name": "getLength",
 				"outputs": [
 					{
 						"internalType": "uint256",
@@ -35,11 +35,43 @@
 				"inputs": [
 					{
 						"internalType": "uint256",
-						"name": "_newNumber",
+						"name": "_index",
 						"type": "uint256"
 					}
 				],
-				"name": "updateNumber",
+				"name": "getNumber",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "numbers",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "removeLastNumber",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -58,7 +90,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/prac2.sol": "StateOverwriteVul"
+			"contracts/prac7.sol": "ArrayStorage"
 		},
 		"evmVersion": "osaka",
 		"libraries": {},
@@ -72,12 +104,12 @@
 		"remappings": []
 	},
 	"sources": {
-		"contracts/prac2.sol": {
-			"keccak256": "0xea0839fc680224d2cc663f61b3a66d85867fe723143b17ff2c76352ca294128d",
+		"contracts/prac7.sol": {
+			"keccak256": "0xaa57d71e8245a1a363118221960beb45fffdf86c3c6759ba7fd40ebc900ffc4c",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://09e0f22b2f0547e76dde3aa1566779d642d3cb5515bcda62822cddd30cb76215",
-				"dweb:/ipfs/QmWNpjvYqr4U823SS4pxueoWFFaczksUzuopkdbUnNsDNk"
+				"bzz-raw://7504c1cc6393c12aacf8f5f7d1bb05c0f7c854947e36b6008daf38ceff2726fd",
+				"dweb:/ipfs/QmRVEh5XXXGzv7WW7yiPXi2VKZP2qf9rLJmLjD2Kf2jqGb"
 			]
 		}
 	},

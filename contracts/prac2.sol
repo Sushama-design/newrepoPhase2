@@ -42,7 +42,7 @@ Auditors check:
 
 =========================================================
 */
-/*
+
 contract StateOverwriteVul {
 
     uint256 public number;
@@ -55,7 +55,7 @@ contract StateOverwriteVul {
         return number;
     }
 }
-*/
+
 /*
 =========================================================
 EXECUTION FLOW

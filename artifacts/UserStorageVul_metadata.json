@@ -6,8 +6,14 @@
 	"output": {
 		"abi": [
 			{
-				"inputs": [],
-				"name": "getNumber",
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "balances",
 				"outputs": [
 					{
 						"internalType": "uint256",
@@ -20,7 +26,7 @@
 			},
 			{
 				"inputs": [],
-				"name": "number",
+				"name": "getMyValue",
 				"outputs": [
 					{
 						"internalType": "uint256",
@@ -35,11 +41,11 @@
 				"inputs": [
 					{
 						"internalType": "uint256",
-						"name": "_newNumber",
+						"name": "_amount",
 						"type": "uint256"
 					}
 				],
-				"name": "updateNumber",
+				"name": "storeValue",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -58,7 +64,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/prac2.sol": "StateOverwriteVul"
+			"contracts/prac5.sol": "UserStorageVul"
 		},
 		"evmVersion": "osaka",
 		"libraries": {},
@@ -72,12 +78,12 @@
 		"remappings": []
 	},
 	"sources": {
-		"contracts/prac2.sol": {
-			"keccak256": "0xea0839fc680224d2cc663f61b3a66d85867fe723143b17ff2c76352ca294128d",
+		"contracts/prac5.sol": {
+			"keccak256": "0xdf4ae728d058752eef3432577e27be5e7838b46e096c78efd8fc207f63ae6a0e",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://09e0f22b2f0547e76dde3aa1566779d642d3cb5515bcda62822cddd30cb76215",
-				"dweb:/ipfs/QmWNpjvYqr4U823SS4pxueoWFFaczksUzuopkdbUnNsDNk"
+				"bzz-raw://1cad85385dfda1680b0a56e31ef84836e1bfa019e0ace1aa2fdea264b15a7b91",
+				"dweb:/ipfs/QmXjUCF7KRwYuk9862HL7Qefm5BE5g69JHDu9NXQc4tT7B"
 			]
 		}
 	},

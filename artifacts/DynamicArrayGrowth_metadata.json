@@ -6,34 +6,31 @@
 	"output": {
 		"abi": [
 			{
-				"inputs": [],
-				"name": "getNumber",
-				"outputs": [
+				"inputs": [
 					{
 						"internalType": "uint256",
-						"name": "",
+						"name": "_value1",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_value2",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_value3",
 						"type": "uint256"
 					}
 				],
-				"stateMutability": "view",
+				"name": "addMultipleValues",
+				"outputs": [],
+				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
 				"inputs": [],
-				"name": "number",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "previousNumber",
+				"name": "getLength",
 				"outputs": [
 					{
 						"internalType": "uint256",
@@ -48,13 +45,38 @@
 				"inputs": [
 					{
 						"internalType": "uint256",
-						"name": "_newNumber",
+						"name": "_index",
 						"type": "uint256"
 					}
 				],
-				"name": "updateNumber",
-				"outputs": [],
-				"stateMutability": "nonpayable",
+				"name": "getNumber",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "numbers",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
 				"type": "function"
 			}
 		],
@@ -71,7 +93,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/prac2.sol": "StateOverwrite"
+			"contracts/prac8.sol": "DynamicArrayGrowth"
 		},
 		"evmVersion": "osaka",
 		"libraries": {},
@@ -85,12 +107,12 @@
 		"remappings": []
 	},
 	"sources": {
-		"contracts/prac2.sol": {
-			"keccak256": "0xea0839fc680224d2cc663f61b3a66d85867fe723143b17ff2c76352ca294128d",
+		"contracts/prac8.sol": {
+			"keccak256": "0xe4272f17a9f8449ba5891ccb85237583c75ebef2d9cc132b3e61d99863ea8a63",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://09e0f22b2f0547e76dde3aa1566779d642d3cb5515bcda62822cddd30cb76215",
-				"dweb:/ipfs/QmWNpjvYqr4U823SS4pxueoWFFaczksUzuopkdbUnNsDNk"
+				"bzz-raw://91c717ec4d7fadc56eaac18af9b54ef691802a945457ca1f0705575c5c314826",
+				"dweb:/ipfs/QmdAKZyrzh8GEDMV2xno9enGQKFWg2QS5evWVKiw66ZC4C"
 			]
 		}
 	},
