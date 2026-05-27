@@ -32,19 +32,6 @@
 				"type": "function"
 			},
 			{
-				"inputs": [],
-				"name": "previousNumber",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
 				"inputs": [
 					{
 						"internalType": "uint256",
@@ -71,7 +58,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/prac2.sol": "StateOverwrite"
+			"contracts/prac2.sol": "StateOverwriteVul"
 		},
 		"evmVersion": "osaka",
 		"libraries": {},
@@ -86,11 +73,11 @@
 	},
 	"sources": {
 		"contracts/prac2.sol": {
-			"keccak256": "0x7b9c4bbf3d2ba6094e683d299d8a060c31741cd49ff4229c12d1d8701856c6b8",
+			"keccak256": "0x0844d9373c3c4790d72ddb7449abc4baa65362da60bc0d479c5c607809cdceb8",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://4529f56ed47bf25a6b9d191b002beb76b3c30fef103785a39531c445bb2ef171",
-				"dweb:/ipfs/QmaHtW8tQfhT9HcV4PXBRCbRXHpRbmHbXfBoT2GPAEwyG7"
+				"bzz-raw://64981a2a27d2e64bf36051c56f5512e632558edc58234a55fe9fb43bd609395d",
+				"dweb:/ipfs/QmXLNVuwLanPxc2oBxXDSkhkLg6afytqb71JfjtbVA6ngi"
 			]
 		}
 	},

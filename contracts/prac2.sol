@@ -42,8 +42,8 @@ Auditors check:
 
 =========================================================
 */
-
-contract StateOverwrite {
+/*
+contract StateOverwriteVul {
 
     uint256 public number;
 
@@ -55,7 +55,7 @@ contract StateOverwrite {
         return number;
     }
 }
-
+*/
 /*
 =========================================================
 EXECUTION FLOW
@@ -261,7 +261,31 @@ Modify contract so that:
 HINT:
 Create:
 uint256 public previousNumber;
+*/
 
+//PATCH CODE 
+
+
+contract StateOverwrite {
+
+    uint256 public number;
+
+    uint256 public previousNumber;
+
+    function updateNumber(uint256 _newNumber) public {
+
+        previousNumber = number;
+
+        number = _newNumber;
+    }
+
+    function getNumber() public view returns (uint256)
+    {
+        return number;
+    }
+}
+
+/*
 =========================================================
 IMPORTANT CONCEPTS LEARNED
 =========================================================
