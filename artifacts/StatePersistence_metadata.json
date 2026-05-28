@@ -7,6 +7,11 @@
 		"abi": [
 			{
 				"inputs": [],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"inputs": [],
 				"name": "counter",
 				"outputs": [
 					{
@@ -36,6 +41,19 @@
 				"name": "increment",
 				"outputs": [],
 				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "owner",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
 				"type": "function"
 			},
 			{
@@ -80,11 +98,11 @@
 	},
 	"sources": {
 		"contracts/prac12.sol": {
-			"keccak256": "0x3b9a25627aaa7b57b4205db1f230479b1624acec1e17c579fcb6ae4049127e08",
+			"keccak256": "0xbc7e6e7f160b813514f07545fc1710b47f4e934d1d8c9d3ec4fd04611acb8be1",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://465849dd1adf3cf7c0c6d56acd2ab282d3cce501c02b8f5b386626029ba75dca",
-				"dweb:/ipfs/QmQza2u8T6H6L5XnN5HpPeEgYNehXPVwckmHfi61qoFTNR"
+				"bzz-raw://1e799e3e15b3d7fb0de22a439e53f8f1b2d499207626228aff98c13341b0e9db",
+				"dweb:/ipfs/QmUutHVYaPBg6mKBdh2ndEjhrrbkKrZUj2XtMFQCnxgY15"
 			]
 		}
 	},

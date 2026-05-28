@@ -68,7 +68,7 @@ Auditors inspect:
 =========================================================
 */
 
-contract StatePersistence {
+contract StatePersistenceVul {
 
     uint256 public counter;
 
@@ -384,3 +384,211 @@ IMPORTANT CONCEPTS LEARNED
 
 =========================================================
 */
+
+
+
+/* 
+
+======================== Audit Report ========================
+
+
+
+Title: Missing Access Control on Critical State Modification Functions
+
+Severity: Medium
+
+Reason: Any external user can arbitrarily modify the `counter` state variable through unrestricted public functions.
+
+Location:
+
+Contract: StatePersistence
+Functions:
+
+* increment()
+* setCounter()
+
+Vulnerability Description:
+The contract exposes two public functions that directly modify protocol state:
+
+function increment() public {
+    counter = counter + 1;
+}
+
+and
+
+function setCounter(uint256 _value) public {
+    counter = _value;
+}
+
+No authorization checks exist before updating storage.
+
+As a result:
+
+* any user can increment the counter
+* any user can overwrite the counter with arbitrary values
+
+The state variable:
+uint256 public counter;
+
+is globally mutable by all external callers.
+
+Impact:
+Attackers can manipulate contract state without restriction.
+
+Example attacks:
+
+* force unexpected counter increments
+* overwrite counter with arbitrary values
+* disrupt protocol assumptions
+
+If this variable controlled:
+
+* protocol configuration
+* treasury accounting
+* governance state
+* voting rounds
+* reward distribution
+
+then unauthorized users could manipulate protocol behavior.
+
+Proof of Concept:
+
+Deploy the contract.
+
+Initial value:
+counter = 0
+
+Attacker calls:
+increment()
+
+Counter becomes:
+1
+
+Attacker then calls:
+setCounter(999999)
+
+Counter becomes:
+
+999999
+
+Unauthorized state modification succeeds.
+
+Root Cause:
+The contract declares state-modifying functions as public without implementing access control.
+
+Missing protection:
+
+require(msg.sender == owner);
+
+No ownership or authorization mechanism restricts state updates.
+
+Recommendation:
+Restrict state-modifying functions to authorized users only.
+
+Recommended protections:
+
+* add owner variable
+* initialize owner in constructor
+* validate caller before modifying storage
+
+Example:
+
+require(msg.sender == owner, "Not owner");
+*/
+/*
+
+ --------------------- PATCH CODE ---------------------------
+
+*/
+
+
+contract StatePersistence {
+
+    // Stores persistent counter value
+    uint256 public counter;
+
+    // PATCH ADDED:
+    // Stores contract owner address
+    address public owner;
+
+    // PATCH ADDED:
+    // Sets deployer as owner
+    constructor() {
+        owner = msg.sender;
+    }
+
+    function increment() public {
+
+        // PATCH ADDED:
+        // Restricts access to owner only
+        require( msg.sender == owner, "Not owner" );
+
+        // Increases counter by 1
+        counter = counter + 1;
+    }
+
+    function setCounter(uint256 _value) public {
+
+        // PATCH ADDED:
+        // Restricts arbitrary counter updates
+        require( msg.sender == owner, "Not owner" );
+
+        // Updates counter value
+        counter = _value;
+    }
+
+    function getCounter() public view returns (uint256) {
+        // Returns current counter
+        return counter;
+    }
+}
+
+/*
+==================== MINI CHALLENGE CODE ========================== 
+*/
+
+
+
+contract StatePersistenceMin {
+
+    // Stores current counter value
+    uint256 public counter;
+
+    // MINI CHALLENGE ADDED:
+    // Stores previous counter value
+    uint256 public previousCounter;
+
+    // BONUS ADDED:
+    // Event logs old value and new value
+    event CounterUpdated( uint256 oldValue, uint256 newValue );
+
+    function increment() public {
+
+        // Save old counter value
+        // BEFORE updating state
+        previousCounter = counter;
+
+        // Increment counter
+        counter = counter + 1;
+
+        // Emit state transition event
+        emit CounterUpdated( previousCounter, counter );
+    }
+
+    function setCounter(uint256 _value) public {
+
+        // Save old counter value
+        // BEFORE overwriting counter
+        previousCounter = counter;
+
+        // Update counter
+        counter = _value;
+
+        // Emit update event
+        emit CounterUpdated( previousCounter, counter );
+    }
+
+    function getCounter() public view returns (uint256) {
+        return counter;
+    }
+}

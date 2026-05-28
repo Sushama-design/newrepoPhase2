@@ -69,7 +69,7 @@ Auditors inspect:
 =========================================================
 */
 
-contract SparseArrayBehavior {
+contract SparseArrayBehaviorVul {
 
     uint256[] public numbers;
 
@@ -402,3 +402,228 @@ IMPORTANT CONCEPTS LEARNED
 
 =========================================================
 */
+
+/*
+======================== Audit Report ========================
+
+Audit Report
+
+Title: Sparse Array Creation Through Improper delete Usage
+
+Severity: Medium
+
+Reason: The contract uses delete on array elements, which resets values to default but does not reduce array length. This creates sparse arrays containing empty gaps.
+
+Location:
+
+Contract: SparseArrayBehavior
+Function: deleteItem()
+
+Vulnerability Description:
+The deleteItem() function uses:
+
+delete numbers[_index];
+
+on a dynamic array element.
+
+In Solidity, using delete on an array index:
+
+* resets the value to default (`0`)
+* DOES NOT remove the element
+* DOES NOT decrease array length
+
+This creates sparse arrays with empty slots.
+
+Example:
+
+Before delete:
+
+[10, 20, 30]
+
+After:
+delete numbers[1]
+
+Result:
+[10, 0, 30]
+
+Array length remains:
+3
+
+instead of shrinking to 2.
+
+Impact:
+Sparse arrays may cause:
+
+* incorrect iteration logic
+* unexpected zero values
+* accounting inconsistencies
+* frontend/UI confusion
+* inefficient storage management
+
+If this array controlled:
+
+* user balances
+* active positions
+* staking entries
+* whitelist indexes
+
+then deleted gaps could break protocol assumptions and create logic bugs.
+
+Proof of Concept:
+
+Deploy the contract.
+
+Call:
+
+addNumber(10)
+addNumber(20)
+addNumber(30)
+
+Array becomes:
+
+[10,20,30]
+
+
+Call:
+
+deleteItem(1)
+
+
+Array becomes:
+
+[10,0,30]
+
+
+Length remains:
+
+solidity id="jlwm10"
+3
+
+
+The element was reset but not removed.
+
+Root Cause:
+The contract incorrectly assumes delete removes array elements completely.
+
+However:
+
+delete numbers[_index];
+
+only resets the value to default and keeps the slot allocated.
+
+No array compaction or length reduction logic exists.
+
+Recommendation:
+Use swap-and-pop pattern to properly remove array elements.
+
+Recommended flow:
+
+1. Move last element into target index
+2. Remove last element using pop()
+
+Also validate index bounds before deletion.
+
+Example:
+
+numbers[_index] = numbers[numbers.length - 1];
+numbers.pop();
+
+
+ --------------------- PATCH CODE ---------------------------
+ 
+ */
+ contract SparseArrayBehavior {
+
+    uint256[] public numbers;
+
+    function addNumber(uint256 _number) public {
+
+        // Adds new number to dynamic array
+        numbers.push(_number);
+    }
+
+    function deleteItem(uint256 _index) public {
+
+        // PATCH ADDED:
+        // Prevent invalid index access
+        require(
+            _index < numbers.length,
+            "Invalid index"
+        );
+
+        // PATCH ADDED:
+        // Move last element into deleted slot
+        // This avoids empty gaps in array
+        numbers[_index] =
+            numbers[numbers.length - 1];
+
+        // PATCH ADDED:
+        // Removes last element
+        // Properly decreases array length
+        numbers.pop();
+    }
+
+    function getArray()
+        public
+        view
+        returns (uint256[] memory)
+    {
+        return numbers;
+    }
+
+    function getLength()
+        public
+        view
+        returns (uint256)
+    {
+        return numbers.length;
+    }
+}
+
+/*
+
+/*
+==================== MINI CHALLENGE CODE ========================== 
+*/
+
+
+contract SparseArrayBehaviorMin {
+
+    uint256[] public numbers;
+
+    function addNumber(uint256 _number) public {
+
+        // Adds new element to array
+        numbers.push(_number);
+    }
+
+    function deleteItem(uint256 _index) public {
+
+        // Prevent invalid index access
+        require(_index < numbers.length, "Invalid index" );
+
+        // SHIFT LEFT LOGIC
+        // Move every element one step left
+        // starting from the deleted index
+        for ( uint256 i = _index; i < numbers.length - 1; i++ ) {
+
+            // Replace current element
+            // with next element
+            numbers[i] = numbers[i + 1];
+        }
+
+        // Remove duplicate last element
+        // and reduce array length
+        numbers.pop();
+    }
+
+    function getArray() public view returns (uint256[] memory)
+    {
+        return numbers;
+    }
+
+    function getLength() public view returns (uint256)
+    {
+        return numbers.length;
+    }
+}

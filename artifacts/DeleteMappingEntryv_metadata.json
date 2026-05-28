@@ -71,7 +71,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/prac10.sol": "DeleteMappingEntry"
+			"contracts/prac10.sol": "DeleteMappingEntryv"
 		},
 		"evmVersion": "osaka",
 		"libraries": {},
@@ -86,11 +86,11 @@
 	},
 	"sources": {
 		"contracts/prac10.sol": {
-			"keccak256": "0x60b13fabf2794846f397cb46e38ebc24f705efda6b4faaad0120d69faa2f5dd3",
+			"keccak256": "0x2131aad661d06e510c2d50b4d781830245a73b8c3ffb5095d6505e18eec14ccd",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://4b1ac5d529e8a4852fa7a307c7ab4f8ec0b3a2f64f6874e642e1a93fb5407644",
-				"dweb:/ipfs/QmUv3qQ1Gug1onTsfguXgbjZN9os53fEX4ekqchRhRHFxM"
+				"bzz-raw://2bb48b8050fbea142551ad39a1632531c5ee9f92db7f703795c047709eebc7fe",
+				"dweb:/ipfs/QmQTP6xaSgFCR8XLeK5hzbmXwugU8kNcXDcYQzn9gttvu5"
 			]
 		}
 	},

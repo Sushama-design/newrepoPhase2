@@ -71,7 +71,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/prac10.sol": "DeleteMappingEntry"
+			"contracts/prac10.sol": "DeleteMappingEntryVul"
 		},
 		"evmVersion": "osaka",
 		"libraries": {},

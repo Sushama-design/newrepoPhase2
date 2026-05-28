@@ -6,14 +6,8 @@
 	"output": {
 		"abi": [
 			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"name": "balances",
+				"inputs": [],
+				"name": "counter",
 				"outputs": [
 					{
 						"internalType": "uint256",
@@ -26,33 +20,33 @@
 			},
 			{
 				"inputs": [],
-				"name": "deleteMyBalance",
+				"name": "getCounter",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "increment",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
-				"inputs": [],
-				"name": "getMyBalance",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
 				"inputs": [
 					{
 						"internalType": "uint256",
-						"name": "_amount",
+						"name": "_value",
 						"type": "uint256"
 					}
 				],
-				"name": "setBalance",
+				"name": "setCounter",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -71,7 +65,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/prac10.sol": "DeleteMappingEntry"
+			"contracts/prac12.sol": "StatePersistenceVul"
 		},
 		"evmVersion": "osaka",
 		"libraries": {},
@@ -85,12 +79,12 @@
 		"remappings": []
 	},
 	"sources": {
-		"contracts/prac10.sol": {
-			"keccak256": "0x60b13fabf2794846f397cb46e38ebc24f705efda6b4faaad0120d69faa2f5dd3",
+		"contracts/prac12.sol": {
+			"keccak256": "0xbc7e6e7f160b813514f07545fc1710b47f4e934d1d8c9d3ec4fd04611acb8be1",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://4b1ac5d529e8a4852fa7a307c7ab4f8ec0b3a2f64f6874e642e1a93fb5407644",
-				"dweb:/ipfs/QmUv3qQ1Gug1onTsfguXgbjZN9os53fEX4ekqchRhRHFxM"
+				"bzz-raw://1e799e3e15b3d7fb0de22a439e53f8f1b2d499207626228aff98c13341b0e9db",
+				"dweb:/ipfs/QmUutHVYaPBg6mKBdh2ndEjhrrbkKrZUj2XtMFQCnxgY15"
 			]
 		}
 	},

@@ -8,17 +8,37 @@
 			{
 				"inputs": [
 					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
+						"internalType": "uint256",
+						"name": "_number",
+						"type": "uint256"
 					}
 				],
-				"name": "balances",
-				"outputs": [
+				"name": "addNumber",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
 					{
 						"internalType": "uint256",
-						"name": "",
+						"name": "_index",
 						"type": "uint256"
+					}
+				],
+				"name": "deleteItem",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getArray",
+				"outputs": [
+					{
+						"internalType": "uint256[]",
+						"name": "",
+						"type": "uint256[]"
 					}
 				],
 				"stateMutability": "view",
@@ -26,14 +46,7 @@
 			},
 			{
 				"inputs": [],
-				"name": "deleteMyBalance",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "getMyBalance",
+				"name": "getLength",
 				"outputs": [
 					{
 						"internalType": "uint256",
@@ -48,13 +61,19 @@
 				"inputs": [
 					{
 						"internalType": "uint256",
-						"name": "_amount",
+						"name": "",
 						"type": "uint256"
 					}
 				],
-				"name": "setBalance",
-				"outputs": [],
-				"stateMutability": "nonpayable",
+				"name": "numbers",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
 				"type": "function"
 			}
 		],
@@ -71,7 +90,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/prac10.sol": "DeleteMappingEntry"
+			"contracts/prac11.sol": "SparseArrayBehaviorV"
 		},
 		"evmVersion": "osaka",
 		"libraries": {},
@@ -85,12 +104,12 @@
 		"remappings": []
 	},
 	"sources": {
-		"contracts/prac10.sol": {
-			"keccak256": "0x60b13fabf2794846f397cb46e38ebc24f705efda6b4faaad0120d69faa2f5dd3",
+		"contracts/prac11.sol": {
+			"keccak256": "0xce471e5fed0df350b8964f0ef26aaadfa4ee8e18f26bfc1cd82100174bb3c4af",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://4b1ac5d529e8a4852fa7a307c7ab4f8ec0b3a2f64f6874e642e1a93fb5407644",
-				"dweb:/ipfs/QmUv3qQ1Gug1onTsfguXgbjZN9os53fEX4ekqchRhRHFxM"
+				"bzz-raw://9c53a7382b0b7e762fa99de77f3cf8d94961dc1bc43228109edbf933f4b584c3",
+				"dweb:/ipfs/QmbpM1nmpWQwh9LQ5ceLVCEGHrapx3KgN8aQuKH6ifwQwc"
 			]
 		}
 	},

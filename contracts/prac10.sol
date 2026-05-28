@@ -77,7 +77,7 @@ Auditors inspect:
 =========================================================
 */
 
-contract DeleteMappingEntry {
+contract DeleteMappingEntryVul {
 
     mapping(address => uint256) public balances;
 
@@ -355,6 +355,8 @@ Modify contract so that:
 BONUS:
 Restrict deletion to owner only.
 
+
+
 =========================================================
 IMPORTANT CONCEPTS LEARNED
 =========================================================
@@ -372,3 +374,170 @@ IMPORTANT CONCEPTS LEARNED
 
 =========================================================
 */
+
+
+
+
+/* 
+======================== Audit Report ========================
+
+Title: Unrestricted Balance Modification and Deletion
+
+Severity: Medium
+
+Reason: Any external user can arbitrarily modify and delete their stored balance without validation or restrictions.
+
+Location:
+
+Contract: DeleteMappingEntryVul
+Functions:
+
+* setBalance()
+* deleteMyBalance()
+
+Vulnerability Description:
+The contract allows any user to directly overwrite their balance using the setBalance() function.
+
+Additionally, users can completely remove their stored balance using deleteMyBalance().
+
+No validation exists to:
+
+* restrict balance manipulation
+* enforce business rules
+* prevent accidental deletion
+
+The following functions are fully user-controlled:
+
+function setBalance(uint256 _amount) public {
+balances[msg.sender] = _amount;
+}
+
+function deleteMyBalance() public {
+delete balances[msg.sender];
+}
+
+Impact:
+Users can arbitrarily:
+
+* increase balances
+* decrease balances
+* reset balances to zero
+
+If this mapping controlled critical protocol logic such as:
+
+staking balances
+reward calculations
+governance voting power
+user accounting
+
+then users could manipulate protocol behavior and break accounting assumptions.
+
+Proof of Concept:
+
+Deploy the contract.
+
+User calls:
+setBalance(1000)
+
+Stored balance becomes:
+balances[user] = 1000
+
+User then calls:
+deleteMyBalance()
+
+Stored balance becomes:
+balances[user] = 0
+
+The balance is deleted successfully without restriction.
+
+Root Cause:
+The contract directly allows user-controlled storage modification and deletion.
+
+No validation exists to:
+
+* restrict balance changes
+* enforce minimum constraints
+* protect critical state transitions
+
+Recommendation:
+Add validation rules before modifying balances.
+
+If balances represent sensitive protocol state:
+
+* restrict unauthorized updates
+* validate allowed ranges
+* control deletion permissions
+
+Example:
+
+require(_amount > 0, "Invalid amount");
+
+
+
+ --------------------- PATCH CODE ---------------------------
+
+*/
+
+contract DeleteMappingEntry {
+
+
+mapping(address => uint256) public balances;
+
+function setBalance(uint256 _amount) public {
+
+    require(_amount > 0, "Invalid amount");
+
+    balances[msg.sender] = _amount;
+}
+
+function deleteMyBalance() public {
+
+    require(
+        balances[msg.sender] > 0,
+        "No balance stored"
+    );
+
+    delete balances[msg.sender];
+}
+
+function getMyBalance() public view returns (uint256) {
+    return balances[msg.sender];
+}
+
+}
+
+
+/*
+
+==================== MINI CHALLENGE CODE ========================== 
+*/
+
+contract DeleteMappingEntryMin {
+
+    mapping(address => bool) public whitelist;
+
+    address public owner;
+
+    constructor() {
+        owner = msg.sender;
+    }
+
+    modifier onlyOwner() {
+        require( msg.sender == owner, "Not owner" );
+        _;
+    }
+
+    function addToWhitelist( address _user ) public onlyOwner {
+        whitelist[_user] = true;
+    }
+
+    function removeFromWhitelist( address _user )  public  onlyOwner
+    {
+        delete whitelist[_user];
+    }
+
+    function isWhitelisted( address _user ) public view returns (bool) {
+        return whitelist[_user];
+    }
+}
+
