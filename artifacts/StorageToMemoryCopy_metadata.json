@@ -7,50 +7,51 @@
 		"abi": [
 			{
 				"inputs": [],
-				"name": "createAndModifyArray",
-				"outputs": [
-					{
-						"internalType": "uint256[]",
-						"name": "",
-						"type": "uint256[]"
-					}
-				],
-				"stateMutability": "pure",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256[]",
-						"name": "_numbers",
-						"type": "uint256[]"
-					}
-				],
-				"name": "modifyInputArray",
-				"outputs": [
-					{
-						"internalType": "uint256[]",
-						"name": "",
-						"type": "uint256[]"
-					}
-				],
-				"stateMutability": "pure",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "_value",
-						"type": "uint256"
-					}
-				],
-				"name": "storeValue",
+				"name": "addValues",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
+				"inputs": [],
+				"name": "copyArrayToMemory",
+				"outputs": [
+					{
+						"internalType": "uint256[]",
+						"name": "",
+						"type": "uint256[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getStorageArray",
+				"outputs": [
+					{
+						"internalType": "uint256[]",
+						"name": "",
+						"type": "uint256[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "modifyMemoryCopy",
+				"outputs": [
+					{
+						"internalType": "uint256[]",
+						"name": "",
+						"type": "uint256[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
 				"inputs": [
 					{
 						"internalType": "uint256",
@@ -58,7 +59,7 @@
 						"type": "uint256"
 					}
 				],
-				"name": "storedNumbers",
+				"name": "numbers",
 				"outputs": [
 					{
 						"internalType": "uint256",
@@ -83,7 +84,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/prac20.sol": "ModifyMemoryArray"
+			"contracts/prac20.sol": "StorageToMemoryCopy"
 		},
 		"evmVersion": "osaka",
 		"libraries": {},
@@ -98,11 +99,11 @@
 	},
 	"sources": {
 		"contracts/prac20.sol": {
-			"keccak256": "0x426c0895ed9a87252751903b710182ca4361ef0e656cf9706c46bab9da5360a3",
+			"keccak256": "0x1d997e386a6e405fb20db958863fa38069b9cbecc3c201e82cda9d1d93de8d6b",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://00510bb93e93c36eaf341aa35be541651f5442639609ed1b9e1071378cd2fb7b",
-				"dweb:/ipfs/Qmc1S36NPdyUWZhnCaz49ehjPGgBa9QorRsRFNCBZ6UM1a"
+				"bzz-raw://005bf24c4d3a7b9eefb1bfcc6290ae0cd31a62e8bc415192ae1f1a313421969c",
+				"dweb:/ipfs/QmVAta5AXgZ8iYeE8c9mHopCCKqPRHsgeRGt3UQqzf3sUt"
 			]
 		}
 	},

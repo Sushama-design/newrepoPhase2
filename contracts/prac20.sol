@@ -3,58 +3,58 @@ pragma solidity ^0.8.20;
 
 /*
 =========================================================
-PRACTICAL: Modify memory array
-CONCEPT: Mutable temporary data
+PRACTICAL: Copy storage array to memory
+CONCEPT: Data copying behavior
 =========================================================
 
 OBJECTIVE
 
-- Learn how memory arrays can be modified
-- Understand mutable temporary data
-- Learn that memory changes do NOT persist
-- Understand difference between memory and storage mutation
+- Learn how storage arrays are copied into memory
+- Understand copy behavior in Solidity
+- Learn difference between storage reference and memory copy
+- Understand why memory modifications do NOT affect storage
 
 ---------------------------------------------------------
 CORE IDEA
 ---------------------------------------------------------
 
-Memory arrays are mutable.
+When storage array is assigned to memory:
 
-This means:
-their values CAN be changed during execution.
+uint256[] memory temp = numbers;
+
+A FULL COPY is created.
 
 ---------------------------------------------------------
 IMPORTANT UNDERSTANDING
 ---------------------------------------------------------
 
-Even though memory arrays are mutable:
+After copying:
 
-Changes are TEMPORARY.
-
-After function execution:
-memory disappears.
+- temp becomes independent memory array
+- original storage remains unchanged
+- modifying temp does NOT affect storage
 
 ---------------------------------------------------------
-MEMORY ARRAY BEHAVIOR
+STORAGE -> MEMORY COPY
 ---------------------------------------------------------
 
-Memory array:
-- temporary
-- modifiable
-- non-persistent
+STORAGE:
+Permanent blockchain data
+
+MEMORY:
+Temporary execution copy
 
 ---------------------------------------------------------
 REAL-WORLD USAGE
 ---------------------------------------------------------
 
-Mutable memory arrays used for:
+Storage-to-memory copying used in:
 
+- batch processing
 - temporary calculations
 - sorting
 - filtering
-- aggregation
-- batch processing
-- intermediate transformations
+- returning data safely
 
 ---------------------------------------------------------
 AUDITOR FOCUS
@@ -62,81 +62,79 @@ AUDITOR FOCUS
 
 Auditors inspect:
 
-- Are memory changes intentional?
-- Is storage accidentally expected to change?
-- Can large memory operations cause DOS?
-- Are loops scalable?
-- Are copies handled safely?
+- Is copy intentional?
+- Is developer expecting reference?
+- Are mutations safe?
+- Is excessive copying expensive?
+- Can large arrays create DOS?
 
 =========================================================
 */
 
-contract ModifyMemoryArray {
+contract StorageToMemoryCopy {
 
-    uint256[] public storedNumbers;
+    uint256[] public numbers;
 
-    function createAndModifyArray()
+    function addValues() public {
+
+        /*
+            STORE VALUES IN STORAGE ARRAY
+        */
+        numbers.push(10);
+
+        numbers.push(20);
+
+        numbers.push(30);
+    }
+
+    function copyArrayToMemory()
         public
-        pure
+        view
         returns (uint256[] memory)
     {
 
         /*
-            CREATE MEMORY ARRAY
+            STORAGE -> MEMORY COPY
 
-            Temporary array with size 3
+            Entire storage array copied
+            into temporary memory array.
         */
-        uint256[] memory tempArray = new uint256[](3);
+        uint256[] memory tempArray = numbers;
 
         /*
-            Initial values
-        */
-        tempArray[0] = 1;
-
-        tempArray[1] = 2;
-
-        tempArray[2] = 3;
-
-        /*
-            MODIFY MEMORY ARRAY
-
-            Memory arrays are mutable.
-        */
-        tempArray[1] = 999;
-
-        /*
-            Final array:
-
-            [1,999,3]
+            Returning temporary copy
         */
         return tempArray;
     }
 
-    function modifyInputArray(uint256[] memory _numbers)
+    function modifyMemoryCopy()
         public
-        pure
+        view
         returns (uint256[] memory)
     {
 
         /*
-            Modify first element
+            Create memory copy
         */
-        _numbers[0] = 777;
+        uint256[] memory tempArray = numbers;
 
         /*
-            Changes apply only to memory copy
+            Modify MEMORY copy only
         */
-        return _numbers;
+        tempArray[0] = 999;
+
+        /*
+            Original storage remains unchanged
+        */
+        return tempArray;
     }
 
-    function storeValue(uint256 _value) public {
-
-        /*
-            STORAGE ARRAY
-
-            Persists permanently.
-        */
-        storedNumbers.push(_value);
+    function getStorageArray()
+        public
+        view
+        returns (uint256[] memory)
+    {
+        return numbers;
     }
 }
 
@@ -146,28 +144,43 @@ EXECUTION FLOW
 =========================================================
 
 CALL:
-createAndModifyArray()
+addValues()
 
-EVM ACTIONS:
+STORAGE ARRAY:
 
-1. Temporary memory allocated
-2. Array created
-3. Values inserted
-4. tempArray[1] modified
-5. Modified array returned
-6. Memory destroyed after execution
+[10,20,30]
 
 ---------------------------------------------------------
 
-FINAL RETURNED ARRAY:
+CALL:
+copyArrayToMemory()
 
-[1,999,3]
+EVM ACTIONS:
+
+1. Storage array loaded
+2. Full copy created in memory
+3. tempArray becomes independent copy
+4. Memory array returned
+5. Memory cleared after execution
+
+---------------------------------------------------------
+
+CALL:
+modifyMemoryCopy()
+
+MEMORY COPY BEFORE:
+[10,20,30]
+
+AFTER MODIFICATION:
+[999,20,30]
 
 ---------------------------------------------------------
 
 IMPORTANT
 
-No blockchain storage modified.
+ORIGINAL STORAGE STILL:
+
+[10,20,30]
 
 =========================================================
 REMIX TESTING
@@ -180,63 +193,56 @@ Deploy contract
 
 STEP 2:
 Call:
-createAndModifyArray()
-
-EXPECTED:
-[1,999,3]
+addValues()
 
 ---------------------------------------------------------
 
 STEP 3:
 Call:
-storedNumbers(0)
+getStorageArray()
 
 EXPECTED:
-Error
-
-Reason:
-Nothing stored permanently.
+[10,20,30]
 
 ---------------------------------------------------------
 
 STEP 4:
 Call:
-modifyInputArray([5,6,7])
+copyArrayToMemory()
 
 EXPECTED:
-[777,6,7]
+[10,20,30]
 
 ---------------------------------------------------------
 
 STEP 5:
 Call:
-storeValue(100)
+modifyMemoryCopy()
+
+EXPECTED:
+[999,20,30]
 
 ---------------------------------------------------------
 
 STEP 6:
 Call:
-storedNumbers(0)
+getStorageArray()
 
 EXPECTED:
-100
+[10,20,30]
 
 OBSERVE:
-Storage persists.
-Memory does not.
+Storage unchanged.
 
 =========================================================
 EDGE CASE TESTS
 =========================================================
 
 TEST:
-Modify zero values
-
-Input:
-[0,0,0]
+Copy empty storage array
 
 EXPECTED:
-[777,0,0]
+Returns empty memory array
 
 ---------------------------------------------------------
 
@@ -244,7 +250,7 @@ TEST:
 Large arrays
 
 OBSERVE:
-Higher gas consumption
+Higher gas usage due to copying
 
 ---------------------------------------------------------
 
@@ -252,85 +258,93 @@ TEST:
 Repeated calls
 
 OBSERVE:
-Fresh memory created each execution
+Fresh memory copy created each execution
 
 =========================================================
-IMPORTANT MEMORY UNDERSTANDING
+IMPORTANT COPY UNDERSTANDING
 =========================================================
 
-MEMORY ARRAYS ARE MUTABLE
+THIS LINE:
 
-You CAN change elements.
-
-Example:
-
-tempArray[1] = 999;
+uint256[] memory tempArray = numbers;
 
 ---------------------------------------------------------
 
-HOWEVER:
-Changes are temporary only.
+DOES:
+Create FULL COPY.
 
 ---------------------------------------------------------
 
-AFTER EXECUTION:
-Memory cleared automatically.
+DOES NOT:
+Create storage reference.
 
 =========================================================
-MEMORY VS STORAGE MUTATION
+MEMORY COPY BEHAVIOR
+=========================================================
+
+AFTER COPYING:
+
+Storage Array:
+[10,20,30]
+
+Memory Array:
+[10,20,30]
+
+---------------------------------------------------------
+
+AFTER MODIFYING MEMORY:
+
+Storage:
+[10,20,30]
+
+Memory:
+[999,20,30]
+
+---------------------------------------------------------
+
+IMPORTANT
+
+Arrays become independent after copy.
+
+=========================================================
+STORAGE VS MEMORY REFERENCE
 =========================================================
 
 ---------------------------------------------------------
-MEMORY MUTATION
+MEMORY COPY
 ---------------------------------------------------------
 
-Temporary
+uint256[] memory temp = numbers;
 
-Non-persistent
-
-Cheap
+Creates independent copy.
 
 ---------------------------------------------------------
-STORAGE MUTATION
+STORAGE REFERENCE
 ---------------------------------------------------------
 
-Permanent
+uint256[] storage temp = numbers;
 
-Blockchain state updated
+Creates direct pointer/reference.
 
-Expensive
-
-=========================================================
-IMPORTANT COPY BEHAVIOR
-=========================================================
-
-FUNCTION INPUT:
-
-uint256[] memory _numbers
-
----------------------------------------------------------
-
-This creates MEMORY COPY.
-
-Modifying _numbers:
-does NOT affect original external data.
+Changes affect original storage.
 
 =========================================================
 GAS OBSERVATION
 =========================================================
 
-MEMORY OPERATIONS:
-Cheaper than storage
+COPYING LARGE ARRAYS:
+Expensive
 
 ---------------------------------------------------------
 
-LARGE MEMORY ARRAYS:
-Still expensive computationally
+Reason:
+Every element copied individually
+from storage into memory.
 
 ---------------------------------------------------------
 
-STORAGE WRITES:
-Most expensive operations
+VERY LARGE ARRAYS:
+May become DOS risk.
 
 =========================================================
 SECURITY / AUDITOR MINDSET
@@ -340,35 +354,35 @@ SECURITY / AUDITOR MINDSET
 1. MEMORY/STORAGE CONFUSION
 ---------------------------------------------------------
 
-Common Solidity bug.
+Common Solidity bug source.
 
 Developers may incorrectly assume:
-memory changes persist permanently.
+memory copy affects storage.
 
 ---------------------------------------------------------
 2. DOS RISK
 ---------------------------------------------------------
 
-Large memory array operations may:
+Huge arrays may:
 - consume excessive gas
-- exceed block limits
+- exceed block gas limits
 
 ---------------------------------------------------------
-3. LOOP RISKS
+3. COPYING COST
 ---------------------------------------------------------
 
-Nested loops on large memory arrays
-can become dangerous.
+Large storage-to-memory copies
+can become very expensive.
 
 ---------------------------------------------------------
-4. COPY ASSUMPTIONS
+4. REFERENCE ASSUMPTIONS
 ---------------------------------------------------------
 
 Auditors verify:
-whether function uses:
-- reference
+whether developer intended:
+- copy
 OR
-- copy semantics
+- direct storage reference
 
 =========================================================
 ATTACK THINKING
@@ -376,24 +390,22 @@ ATTACK THINKING
 
 ATTACK SCENARIO
 
-Attacker provides huge arrays.
+Attacker inflates storage array size.
 
-Contract performs:
-- heavy memory allocation
-- large loops
-- expensive modifications
+Function copying array:
+becomes too expensive.
 
 Result:
-DOS via gas exhaustion.
+Function becomes unusable.
 
 ---------------------------------------------------------
 
-ANOTHER RISK
+REAL-WORLD ISSUE
 
-Developer expects:
-memory modifications persist.
-
-Critical logic silently fails.
+Large storage copying has caused:
+- DOS vulnerabilities
+- gas exhaustion
+- scalability failures
 
 =========================================================
 MINI CHALLENGE
@@ -401,28 +413,28 @@ MINI CHALLENGE
 
 Modify contract so that:
 
-1. Double every element in memory array
-2. Use loop for modification
-3. Return updated array
+1. Create storage reference variable
+2. Modify referenced array
+3. Observe storage changes directly
 
 BONUS:
 Compare:
-memory array vs storage array behavior
+memory copy vs storage reference
 
 =========================================================
 IMPORTANT CONCEPTS LEARNED
 =========================================================
 
-- Memory arrays are mutable
-- Memory changes are temporary
+- Storage-to-memory creates full copy
+- Memory copies are independent
+- Memory changes do not affect storage
+- Storage references behave differently
+- Large array copying increases gas
 - Memory cleared after execution
 - Storage persists permanently
-- Memory arrays useful for temporary processing
-- Function inputs may become memory copies
-- Memory operations cheaper than storage
-- Large memory operations increase gas
+- Copying dynamic arrays is expensive
 - Memory/storage confusion causes bugs
-- Auditors inspect temporary mutation carefully
+- Auditors inspect copy behavior carefully
 
 =========================================================
 */
