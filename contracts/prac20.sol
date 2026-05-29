@@ -71,7 +71,7 @@ Auditors inspect:
 =========================================================
 */
 
-contract StorageToMemoryCopy {
+contract StorageToMemoryCopyVul {
 
     uint256[] public numbers;
 
@@ -438,3 +438,243 @@ IMPORTANT CONCEPTS LEARNED
 
 =========================================================
 */
+
+/*
+
+======================== Audit Report ========================
+
+
+Title: Missing Bounds Validation Before Memory Array Modification
+
+Severity: Low
+
+Reason: modifyMemoryCopy() assumes the storage array contains at least one element before modifying index 0.
+
+Location:
+
+Contract: StorageToMemoryCopy
+Function: modifyMemoryCopy()
+
+Vulnerability Description:
+
+The modifyMemoryCopy() function creates a memory copy of the storage array and immediately modifies:
+
+tempArray[0] = 999;
+
+However, the function does not validate whether the original storage array contains any elements.
+
+If numbers is empty, the memory array will also be empty, 
+causing an out-of-bounds array access and transaction revert.
+
+Although this does not create direct fund risk, missing bounds validation is considered 
+unsafe array handling and can introduce denial-of-service conditions in more complex systems.
+
+Impact:
+
+If modifyMemoryCopy() is called before addValues(), the transaction reverts.
+
+In larger protocols, similar unchecked array access patterns may cause:
+
+* unexpected transaction failures
+* denial-of-service conditions
+* broken execution flows
+* protocol instability
+
+Proof of Concept:
+
+1. Deploy the contract.
+
+2. Call:
+modifyMemoryCopy()
+
+before calling:
+addValues()
+
+3. Transaction reverts because:
+tempArray[0]
+
+does not exist.
+
+Root Cause:
+
+The function assumes the array contains at least one element before accessing index 0.
+
+No bounds validation exists before modifying the memory array.
+
+Recommendation:
+
+Validate array length before accessing array indexes.
+
+Example:
+require(tempArray.length > 0, "Empty array");
+*/
+
+ //--------------------- PATCH CODE ---------------------------
+
+
+contract StorageToMemoryCopy {
+
+    uint256[] public numbers;
+
+    address public owner;
+
+    constructor() {
+
+        // PATCH ADDED:
+        // Store contract owner
+        owner = msg.sender;
+    }
+
+    function addValues() public {
+
+        // PATCH ADDED:
+        // Restrict storage mutation to owner
+        require(msg.sender == owner, "Not owner");
+
+        /*
+            STORE VALUES IN STORAGE ARRAY
+        */
+        numbers.push(10);
+
+        numbers.push(20);
+
+        numbers.push(30);
+    }
+
+    function copyArrayToMemory()
+        public
+        view
+        returns (uint256[] memory)
+    {
+
+        /*
+            STORAGE -> MEMORY COPY
+
+            Entire storage array copied
+            into temporary memory array.
+        */
+        uint256[] memory tempArray = numbers;
+
+        return tempArray;
+    }
+
+    function modifyMemoryCopy()
+        public
+        view
+        returns (uint256[] memory)
+    {
+
+        /*
+            Create memory copy
+        */
+        uint256[] memory tempArray = numbers;
+
+        // PATCH ADDED:
+        // Prevent out-of-bounds access
+        require(
+            tempArray.length > 0,
+            "Empty array"
+        );
+
+        /*
+            Modify MEMORY copy only
+        */
+        tempArray[0] = 999;
+
+        /*
+            Original storage remains unchanged
+        */
+        return tempArray;
+    }
+
+    function getStorageArray()
+        public
+        view
+        returns (uint256[] memory)
+    {
+        return numbers;
+    }
+}
+
+//==================== MINI CHALLENGE CODE ========================== 
+
+
+contract StorageToMemoryCopyMin {
+
+    uint256[] public numbers;
+
+    function addValues() public {
+
+        numbers.push(10);
+
+        numbers.push(20);
+
+        numbers.push(30);
+    }
+
+    // PATCH ADDED:
+    // Demonstrates STORAGE reference behavior
+    // Changes directly affect blockchain storage
+    function modifyStorageReference() public {
+
+        /*
+            STORAGE REFERENCE
+
+            tempArray is NOT a copy.
+
+            It directly references:
+            numbers
+        */
+        uint256[] storage tempArray = numbers;
+
+        // PATCH ADDED:
+        // Directly modifies storage array
+        tempArray[0] = 999;
+    }
+
+    // BONUS PATCH:
+    // Compare MEMORY copy vs STORAGE reference
+    function compareMemoryAndStorage()
+        public
+        view
+        returns (
+            uint256 memoryValue,
+            uint256 storageValue
+        )
+    {
+
+        require(numbers.length > 0, "Empty array");
+
+        /*
+            MEMORY COPY
+
+            Independent temporary copy.
+        */
+        uint256[] memory memoryArray = numbers;
+
+        /*
+            Modify MEMORY copy only
+        */
+        memoryArray[0] = 555;
+
+        /*
+            STORAGE remains unchanged.
+
+            memoryArray[0] -> 555
+            numbers[0]     -> actual storage value
+        */
+        return (
+            memoryArray[0],
+            numbers[0]
+        );
+    }
+
+    function getStorageArray()
+        public
+        view
+        returns (uint256[] memory)
+    {
+        return numbers;
+    }
+}
+

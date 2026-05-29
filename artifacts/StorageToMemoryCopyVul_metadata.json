@@ -7,11 +7,6 @@
 		"abi": [
 			{
 				"inputs": [],
-				"stateMutability": "nonpayable",
-				"type": "constructor"
-			},
-			{
-				"inputs": [],
 				"name": "addValues",
 				"outputs": [],
 				"stateMutability": "nonpayable",
@@ -74,19 +69,6 @@
 				],
 				"stateMutability": "view",
 				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "owner",
-				"outputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
 			}
 		],
 		"devdoc": {
@@ -102,7 +84,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/prac20.sol": "StorageToMemoryCopy"
+			"contracts/prac20.sol": "StorageToMemoryCopyVul"
 		},
 		"evmVersion": "osaka",
 		"libraries": {},

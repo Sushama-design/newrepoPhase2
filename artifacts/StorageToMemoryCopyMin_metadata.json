@@ -7,11 +7,6 @@
 		"abi": [
 			{
 				"inputs": [],
-				"stateMutability": "nonpayable",
-				"type": "constructor"
-			},
-			{
-				"inputs": [],
 				"name": "addValues",
 				"outputs": [],
 				"stateMutability": "nonpayable",
@@ -19,12 +14,17 @@
 			},
 			{
 				"inputs": [],
-				"name": "copyArrayToMemory",
+				"name": "compareMemoryAndStorage",
 				"outputs": [
 					{
-						"internalType": "uint256[]",
-						"name": "",
-						"type": "uint256[]"
+						"internalType": "uint256",
+						"name": "memoryValue",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "storageValue",
+						"type": "uint256"
 					}
 				],
 				"stateMutability": "view",
@@ -45,15 +45,9 @@
 			},
 			{
 				"inputs": [],
-				"name": "modifyMemoryCopy",
-				"outputs": [
-					{
-						"internalType": "uint256[]",
-						"name": "",
-						"type": "uint256[]"
-					}
-				],
-				"stateMutability": "view",
+				"name": "modifyStorageReference",
+				"outputs": [],
+				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
@@ -74,19 +68,6 @@
 				],
 				"stateMutability": "view",
 				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "owner",
-				"outputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
 			}
 		],
 		"devdoc": {
@@ -102,7 +83,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/prac20.sol": "StorageToMemoryCopy"
+			"contracts/prac20.sol": "StorageToMemoryCopyMin"
 		},
 		"evmVersion": "osaka",
 		"libraries": {},
