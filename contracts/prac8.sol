@@ -65,7 +65,7 @@ Auditors inspect:
 =========================================================
 */
 
-/*
+
 contract DynamicArrayGrowthVul {
 
     uint256[] public numbers;
@@ -95,7 +95,7 @@ contract DynamicArrayGrowthVul {
         return numbers.length;
     }
 }
-*/
+
 /*
 =========================================================
 EXECUTION FLOW
@@ -385,32 +385,8 @@ HINT:
 Use:
 require(numbers.length < 10)
 
-*/
 
-contract DynamicArrayGrowth {
 
-    uint256[] public numbers;
-
-    function addMultipleValues( uint256 _value1, uint256 _value2, uint256 _value3 ) public {
-
-        require(numbers.length < 10, "Array is too large");
-
-        numbers.push(_value1);
-        numbers.push(_value2);
-        numbers.push(_value3);
-
-    }
-
-    function getNumber(uint256 _index) public view returns (uint256)
-    {
-        return numbers[_index];
-    }
-
-    function getLength() public view returns (uint256) {
-        return numbers.length;
-    }
-}
-/*
 =========================================================
 IMPORTANT CONCEPTS LEARNED
 =========================================================
@@ -428,3 +404,186 @@ IMPORTANT CONCEPTS LEARNED
 
 =========================================================
 */
+
+
+
+/*
+
+======================== Audit Report ========================
+
+
+
+Title: Unbounded Dynamic Array Growth Leading to Storage Bloat and Gas Exhaustion
+
+Severity: Medium
+
+Reason: Any external user can continuously increase on-chain storage, causing unnecessary protocol state growth and long-term gas inefficiency.
+
+Location:
+
+Contract: DynamicArrayGrowthVul
+Function: addMultipleValues()
+
+Vulnerability Description:
+
+The addMultipleValues() function allows unrestricted array growth by permitting any external caller to continuously push values into the numbers array.
+
+Since dynamic storage writes are permanent and expensive, attackers can repeatedly call this function to inflate contract storage indefinitely.
+
+There are no:
+
+* array size limits
+* access controls
+* rate limits
+* cleanup mechanisms
+
+This creates a storage-bloat vulnerability.
+
+Impact:
+
+An attacker can:
+
+* massively increase contract storage usage
+* increase long-term protocol operational costs
+* make future interactions more gas expensive
+* create denial-of-service conditions in functions that may later iterate over the array
+* force state growth permanently on-chain
+
+If future protocol upgrades introduce loops over numbers, the issue can escalate into a severe gas-based DoS vulnerability.
+
+Proof of Concept:
+
+1. Deploy the contract.
+
+2. Repeatedly call:
+addMultipleValues(1,2,3);
+
+3. Observe:
+getLength()
+
+The array size continuously increases without restriction.
+
+An attacker can automate this through scripting and create excessive storage growth.
+
+Root Cause:
+
+The contract allows unrestricted writes to a dynamic storage array.
+
+No validation exists for:
+
+* maximum array size
+* authorized callers
+* storage growth limits
+
+Recommendation:
+
+Implement protections such as:
+
+* maximum array size restrictions
+* access control
+* pagination architecture
+* storage cleanup mechanisms
+* event-based off-chain tracking instead of permanent storage where possible
+
+Example:
+require(numbers.length + 3 <= MAX_SIZE, "Array limit reached");
+*/
+/*
+ --------------------- PATCH CODE ---------------------------
+*/
+contract DynamicArrayGrowth {
+
+    uint256[] public numbers;
+
+    address public owner;
+
+    // PATCH ADDED:
+    // Define maximum storage growth limit
+    // Prevents unlimited state expansion
+    uint256 public constant MAX_SIZE = 100;
+
+    constructor() {
+        owner = msg.sender;
+    }
+
+    function addMultipleValues( uint256 _value1, uint256 _value2, uint256 _value3 ) public {
+
+        // PATCH ADDED:
+        // Restrict unauthorized state growth
+        // Prevent arbitrary users from bloating storage
+        require(msg.sender == owner, "Not owner");
+
+        // PATCH ADDED:
+        // Prevent unbounded array growth
+        // Stops storage-bloat attacks
+        require( numbers.length + 3 <= MAX_SIZE, "Array limit reached" );
+
+        numbers.push(_value1);
+
+        numbers.push(_value2);
+
+        numbers.push(_value3);
+    }
+
+    function getNumber(uint256 _index) public view returns (uint256)
+    {
+
+        // PATCH ADDED:
+        // Prevent invalid array access
+        // Avoid out-of-bounds revert confusion
+        require(_index < numbers.length, "Invalid index");
+
+        return numbers[_index];
+    }
+
+    function getLength() public view returns (uint256) {
+        return numbers.length;
+    }
+}
+/*
+==================== MINI CHALLENGE CODE ========================== 
+*/
+
+
+contract DynamicArrayGrowthFixedMin {
+
+    uint256[] public numbers;
+
+    function addMultipleValues(
+        uint256 _value1,
+        uint256 _value2,
+        uint256 _value3
+    ) public {
+
+        // PATCH ADDED:
+        // Prevent array from exceeding maximum size
+        // Stops unlimited storage growth
+        require(
+            numbers.length + 3 <= 10,
+            "Maximum array length reached"
+        );
+
+        numbers.push(_value1);
+
+        numbers.push(_value2);
+
+        numbers.push(_value3);
+    }
+
+    function getNumber(uint256 _index)
+        public
+        view
+        returns (uint256)
+    {
+
+        // PATCH ADDED:
+        // Prevent invalid index access
+        require(_index < numbers.length, "Invalid index");
+
+        return numbers[_index];
+    }
+
+    function getLength() public view returns (uint256) {
+        return numbers.length;
+    }
+}
