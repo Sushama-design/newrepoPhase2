@@ -6,11 +6,6 @@
 	"output": {
 		"abi": [
 			{
-				"inputs": [],
-				"stateMutability": "nonpayable",
-				"type": "constructor"
-			},
-			{
 				"inputs": [
 					{
 						"internalType": "uint256",
@@ -23,7 +18,7 @@
 						"type": "uint256"
 					}
 				],
-				"name": "calculateSum",
+				"name": "calculateMultiplication",
 				"outputs": [
 					{
 						"internalType": "uint256",
@@ -32,32 +27,6 @@
 					}
 				],
 				"stateMutability": "pure",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "demonstrateLocalVariable",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "pure",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "owner",
-				"outputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"stateMutability": "view",
 				"type": "function"
 			},
 			{
@@ -73,7 +42,7 @@
 						"type": "uint256"
 					}
 				],
-				"name": "storeCalculatedValue",
+				"name": "storeMultiplicationResult",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -105,7 +74,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/prac16.sol": "LocalUintVariable"
+			"contracts/prac16.sol": "LocalUintVariableMin"
 		},
 		"evmVersion": "osaka",
 		"libraries": {},

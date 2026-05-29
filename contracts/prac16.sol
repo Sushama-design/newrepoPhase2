@@ -76,7 +76,7 @@ Auditors inspect:
 =========================================================
 */
 
-contract LocalUintVariable {
+contract LocalUintVariableVul {
 
     uint256 public storedValue;
 
@@ -420,3 +420,197 @@ IMPORTANT CONCEPTS LEARNED
 
 =========================================================
 */
+
+/*
+
+======================== Audit Report ========================
+
+
+Title: Missing Access Control on Persistent State Modification
+
+Severity: Medium
+
+Reason: Any external user can modify persistent contract state through storeCalculatedValue().
+
+Location:
+
+Contract: LocalUintVariable
+Function: storeCalculatedValue()
+
+Vulnerability Description:
+
+The contract correctly demonstrates local variable behavior, but the storeCalculatedValue() function allows unrestricted modification of the storedValue state variable.
+
+Any external caller can invoke:
+
+storeCalculatedValue(...)
+
+which permanently updates blockchain storage.
+
+Although local variables such as:
+uint256 result
+
+exist temporarily in memory/stack during execution, the final assignment:
+
+storedValue = result;
+
+modifies persistent state.
+
+No authorization mechanism exists to restrict who can perform this mutation.
+
+Impact:
+
+An attacker can:
+
+* overwrite stored protocol state
+* manipulate persistent values
+* disrupt dependent business logic
+* continuously alter contract behavior
+
+In production systems, similar patterns may affect:
+
+* protocol accounting
+* pricing logic
+* reward calculations
+* treasury configuration
+
+Unauthorized state writes can compromise protocol integrity.
+
+Proof of Concept:
+
+1. Deploy the contract.
+
+2. Legitimate user calls:
+
+storeCalculatedValue(10, 20);
+
+Stored value becomes:
+30
+
+3. Attacker calls:
+storeCalculatedValue(9999, 1);
+
+Stored value becomes:
+10000
+
+without restriction.
+
+Root Cause:
+
+The function performing storage mutation is declared public without validating caller authorization.
+
+No access control protects persistent state updates.
+
+Recommendation:
+
+Restrict state-changing operations to authorized users.
+
+Example:
+
+require(msg.sender == owner, "Not owner");
+
+
+ //--------------------- PATCH CODE ---------------------------
+
+*/
+contract LocalUintVariable {
+
+    uint256 public storedValue;
+
+    address public owner;
+
+    constructor() {
+
+        // PATCH ADDED:
+        // Store deployer as authorized owner
+        owner = msg.sender;
+    }
+
+    function calculateSum(uint256 _a, uint256 _b) public pure returns (uint256)
+    {
+        
+         //   LOCAL VARIABLE
+
+         //   Exists only during execution.
+         //   Does not modify blockchain storage.
+        
+        uint256 sum = _a + _b;
+
+        return sum;
+    }
+
+    function storeCalculatedValue( uint256 _x, uint256 _y ) public {
+
+        // PATCH ADDED:
+        // Restrict persistent state mutation
+        require(msg.sender == owner, "Not owner");
+
+          //  TEMPORARY LOCAL VARIABLE
+           // Used only during execution.
+        
+        uint256 result = _x + _y;
+
+         //   STORAGE WRITE
+         //   This permanently updates blockchain state.
+        
+        storedValue = result;
+    }
+
+    function demonstrateLocalVariable() public pure returns (uint256)
+    {
+          //  Local variable exists temporarily
+           // during function execution only.
+        
+        uint256 temp = 100;
+
+        temp = temp + 50;
+
+        return temp;
+    }
+}
+
+//==================== MINI CHALLENGE CODE ========================== 
+
+
+contract LocalUintVariableMin {
+
+    uint256 public storedValue;
+
+    // PATCH ADDED:
+    // Local calculation only
+    // Does NOT modify blockchain storage
+    function calculateMultiplication( uint256 _a, uint256 _b ) public pure returns (uint256)
+    {
+        /*
+            LOCAL VARIABLE
+
+            multiplicationResult exists only
+            during function execution.
+
+            No storage write occurs.
+        */
+        uint256 multiplicationResult = _a * _b;
+
+        return multiplicationResult;
+    }
+
+    // BONUS PATCH:
+    // Demonstrates expensive storage write
+    function storeMultiplicationResult( uint256 _x, uint256 _y ) public {
+
+        /*
+            LOCAL VARIABLE
+
+            Temporary computation value.
+        */
+        uint256 result = _x * _y;
+
+        /*
+            STORAGE WRITE
+
+            This permanently modifies blockchain state
+            and costs significantly more gas.
+        */
+        storedValue = result;
+    }
+}
