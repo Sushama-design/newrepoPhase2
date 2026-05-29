@@ -74,7 +74,7 @@ Auditors inspect:
 =========================================================
 */
 
-contract MemoryLifecycle {
+contract MemoryLifecycleVul {
 
     string public storedName = "Blockchain";
 
@@ -426,3 +426,201 @@ IMPORTANT CONCEPTS LEARNED
 
 =========================================================
 */
+
+
+/*
+
+
+======================== Audit Report ========================
+
+Title: Missing Demonstration of Memory Isolation Validation
+
+Severity: Informational
+
+Reason: The contract is educational and does not contain a direct exploitable vulnerability, but it lacks explicit validation demonstrating that memory mutations do not affect storage state.
+
+Location:
+
+Contract: MemoryLifecycleVul
+Function: copyStorageToMemory()
+
+Vulnerability Description:
+
+The contract correctly demonstrates temporary memory variable behavior and storage-to-memory copying.
+
+However, the educational example does not explicitly demonstrate that modifying a memory copy does not mutate persistent storage.
+
+This may create misunderstanding for junior developers regarding:
+
+* memory isolation
+* storage persistence
+* reference semantics
+* dynamic type copying behavior
+
+In real-world protocols, confusion between `storage` and `memory` can introduce:
+
+* unintended state mutations
+* failed updates
+* authorization bypass assumptions
+* accounting inconsistencies
+
+The current implementation only copies storage into memory and returns the value without demonstrating mutation isolation.
+
+Impact:
+
+No direct exploitable vulnerability exists.
+
+However, misunderstanding memory vs storage behavior may later lead to:
+
+* incorrect protocol logic
+* unintended state changes
+* gas inefficiencies
+* broken upgradeable storage assumptions
+
+This is especially important when handling:
+
+* structs
+* arrays
+* mappings
+* dynamic strings/bytes
+
+Proof of Concept:
+
+Current implementation:
+
+string memory localCopy = storedName;
+
+creates a temporary memory copy.
+
+But no mutation is performed to prove:
+
+localCopy != storedName
+
+after modification.
+
+Root Cause:
+
+The educational example demonstrates copying but not isolation after mutation.
+
+Recommendation:
+
+Explicitly modify the memory copy and compare it with storage state to demonstrate separation between memory and storage.
+
+Example:
+localCopy = "Modified";
+
+while verifying:
+storedName
+
+remains unchanged.
+
+ //--------------------- PATCH CODE ---------------------------
+
+*/
+contract MemoryLifecycleFixed {
+
+    string public storedName = "Blockchain";
+
+    function createMemoryVariable() public pure returns (uint256)
+    {
+        /*
+            LOCAL TEMPORARY VARIABLE
+
+            Exists only during execution.
+        */
+        uint256 localValue = 100;
+
+        return localValue;
+    }
+
+    function returnMemoryString() public pure returns (string memory)
+    {
+        /*
+            MEMORY STRING
+
+            Dynamic types require explicit memory allocation.
+        */
+        string memory tempName = "Solidity";
+
+        return tempName;
+    }
+
+    function copyStorageToMemory() public view returns ( string memory memoryValue, string memory storageValue )
+    {
+        /*
+            STORAGE -> MEMORY COPY
+
+            localCopy becomes independent temporary copy.
+        */
+        string memory localCopy = storedName;
+
+        // PATCH ADDED:
+        // Modify memory copy only
+        // Does NOT affect storage variable
+        localCopy = "Modified";
+
+        /*
+            Return both values to demonstrate:
+            - memory copy changed
+            - storage remained unchanged
+        */
+        return ( localCopy, storedName );
+    }
+}
+
+//==================== MINI CHALLENGE CODE ========================== 
+
+
+contract MemoryLifecycleFixedMin {
+
+    // BONUS PATCH:
+    // Persistent storage array
+    // Lives permanently on blockchain
+    uint256[] public storedNumbers;
+
+    function createMemoryArray() public pure returns (uint256[] memory) {
+        /*
+            MEMORY ARRAY
+
+            Temporary array existing only
+            during function execution.
+        */
+        uint256[] memory tempArray = new uint256[](3);
+
+        // PATCH ADDED:
+        // Store values inside memory array
+        tempArray[0] = 10;
+        tempArray[1] = 20;
+        tempArray[2] = 30;
+        /*
+            Returning temporary memory array.
+
+            After execution finishes,
+            tempArray disappears from memory.
+        */
+        return tempArray;
+    }
+
+    // BONUS PATCH:
+    // Demonstrates difference between
+    // memory array and storage array
+    function storeNumber(uint256 _number) public {
+
+        /*
+            STORAGE WRITE
+
+            Permanently modifies blockchain state.
+        */
+        storedNumbers.push(_number);
+    }
+
+    function getStoredNumbers() public view returns (uint256[] memory) {
+        /*
+            STORAGE -> MEMORY COPY
+
+            Returning storage array creates
+            temporary memory copy for output.
+        */
+        return storedNumbers;
+    }
+}

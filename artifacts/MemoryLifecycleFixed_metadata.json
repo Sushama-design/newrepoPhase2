@@ -1,0 +1,103 @@
+{
+	"compiler": {
+		"version": "0.8.34+commit.80d5c536"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [],
+				"name": "copyStorageToMemory",
+				"outputs": [
+					{
+						"internalType": "string",
+						"name": "memoryValue",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "storageValue",
+						"type": "string"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "createMemoryVariable",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "pure",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "returnMemoryString",
+				"outputs": [
+					{
+						"internalType": "string",
+						"name": "",
+						"type": "string"
+					}
+				],
+				"stateMutability": "pure",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "storedName",
+				"outputs": [
+					{
+						"internalType": "string",
+						"name": "",
+						"type": "string"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/prac17.sol": "MemoryLifecycleFixed"
+		},
+		"evmVersion": "osaka",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/prac17.sol": {
+			"keccak256": "0x4ba2ddb1d1d21fd1620c4b1f48c9759e579e9a73796e2003f2880e62287e9f25",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://b9fbccfdc0f77d8ac57204fe06fb6e8cdd61d167972c5c2d493c4272fd81b644",
+				"dweb:/ipfs/QmY7WwCjnBuzwCVoR5yYjsTVmwtHoCfrWVWvYyfAgiXLc5"
+			]
+		}
+	},
+	"version": 1
+}
