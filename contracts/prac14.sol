@@ -75,8 +75,8 @@ Auditors inspect:
 
 =========================================================
 */
-
-contract StateMutation {
+/*
+contract StateMutationVul {
 
     uint256 public value;
 
@@ -95,7 +95,7 @@ contract StateMutation {
         return value;
     }
 }
-
+*/
 /*
 =========================================================
 EXECUTION FLOW
@@ -375,4 +375,198 @@ IMPORTANT CONCEPTS LEARNED
 - Auditors inspect state transitions carefully
 
 =========================================================
+*/
+
+
+
+/*
+
+======================== Audit Report ========================
+
+Title: Missing Access Control on State Mutation Functions
+
+Severity: Medium
+
+Reason: Any external user can arbitrarily modify protocol state variables.
+
+Location:
+
+Contract: StateMutationVul
+Function: updateValue()
+Function: increaseValue()
+
+Vulnerability Description:
+
+The contract exposes multiple public functions that directly modify the value state variable without implementing authorization checks.
+
+Any external caller can:
+
+* overwrite the stored value
+* continuously increase the value
+* manipulate contract state arbitrarily
+
+Both updateValue() and increaseValue() mutate persistent storage but lack access restrictions.
+
+In real-world protocols, similar state variables may control:
+
+* accounting values
+* reward calculations
+* governance configuration
+* protocol parameters
+* treasury balances
+
+Unauthorized mutation of such variables can compromise protocol integrity.
+
+Impact:
+
+An attacker can:
+
+* manipulate contract state at will
+* disrupt expected protocol behavior
+* overwrite legitimate values
+* inflate values unexpectedly
+* interfere with dependent contract logic
+
+If integrated into larger systems, this issue may cause financial inconsistencies or protocol malfunction.
+
+Proof of Concept:
+
+1. Deploy the contract.
+
+2. Legitimate user calls:
+updateValue(100);
+
+3. Attacker calls:
+increaseValue(1000000);
+
+4. Observe:
+getValue()
+
+The state variable changes successfully without authorization.
+
+An attacker may also overwrite values directly:
+
+updateValue(1);
+
+Root Cause:
+
+The contract exposes state-mutating functions as public without validating caller permissions.
+
+No access-control mechanism exists to restrict sensitive operations.
+
+Recommendation:
+
+Restrict state-modifying functionality to authorized users using ownership or role-based access control.
+
+Example:
+
+require(msg.sender == owner, "Not owner");
+*/
+
+ //--------------------- PATCH CODE ---------------------------
+
+
+contract StateMutationFixed {
+
+    uint256 public value;
+
+    address public owner;
+
+    constructor() {
+
+        // PATCH ADDED:
+        // Store deployer as contract owner
+        owner = msg.sender;
+    }
+
+    function updateValue(uint256 _newValue) public {
+
+        // PATCH ADDED:
+        // Prevent unauthorized state modification
+        require(msg.sender == owner, "Not owner");
+
+        value = _newValue;
+    }
+
+    function increaseValue(uint256 _amount) public {
+
+        // PATCH ADDED:
+        // Restrict sensitive arithmetic operations
+        require(msg.sender == owner, "Not owner");
+
+        // Solidity ^0.8 automatically protects against overflow
+        value = value + _amount;
+    }
+
+    function getValue() public view returns (uint256) {
+
+        return value;
+    }
+}
+
+//==================== MINI CHALLENGE CODE ========================== 
+/*
+
+contract StateMutationFixedMin {
+
+    uint256 public value;
+
+    // BONUS PATCH:
+    // Store previous state value before mutation
+    uint256 public previousValue;
+
+    // PATCH ADDED:
+    // Store contract owner
+    address public owner;
+
+    // PATCH ADDED:
+    // Emit event after every state mutation
+    event ValueUpdated( uint256 oldValue, uint256 newValue, address updatedBy );
+
+    constructor() {
+
+        // PATCH ADDED:
+        // Initialize owner during deployment
+        owner = msg.sender;
+    }
+
+    function updateValue(uint256 _newValue) public {
+
+        // PATCH ADDED:
+        // Restrict state mutation to owner only
+        require(msg.sender == owner, "Not owner");
+
+        // BONUS PATCH:
+        // Save previous value before modification
+        previousValue = value;
+
+        value = _newValue;
+
+        // PATCH ADDED:
+        // Emit mutation event for auditability
+        emit ValueUpdated(previousValue, value, msg.sender);
+    }
+
+    function increaseValue(uint256 _amount) public {
+
+        // PATCH ADDED:
+        // Restrict arithmetic mutation to owner
+        require(msg.sender == owner, "Not owner");
+
+        // BONUS PATCH:
+        // Save previous value before modification
+        previousValue = value;
+
+        value = value + _amount;
+
+        // PATCH ADDED:
+        // Emit event after state change
+        emit ValueUpdated(previousValue, value, msg.sender);
+    }
+
+    function getValue() public view returns (uint256) {
+
+        return value;
+    }
+}
 */

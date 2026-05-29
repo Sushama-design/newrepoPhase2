@@ -7,43 +7,12 @@
 		"abi": [
 			{
 				"inputs": [],
-				"stateMutability": "nonpayable",
-				"type": "constructor"
-			},
-			{
-				"inputs": [],
-				"name": "getNumber",
+				"name": "getValue",
 				"outputs": [
 					{
 						"internalType": "uint256",
 						"name": "",
 						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "number",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "owner",
-				"outputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
 					}
 				],
 				"stateMutability": "view",
@@ -53,13 +22,39 @@
 				"inputs": [
 					{
 						"internalType": "uint256",
-						"name": "_number",
+						"name": "_amount",
 						"type": "uint256"
 					}
 				],
-				"name": "setNumber",
+				"name": "increaseValue",
 				"outputs": [],
 				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_newValue",
+						"type": "uint256"
+					}
+				],
+				"name": "updateValue",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "value",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
 				"type": "function"
 			}
 		],
@@ -76,7 +71,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/prac13.sol": "DeploymentReset"
+			"contracts/prac14.sol": "StateMutationVul"
 		},
 		"evmVersion": "osaka",
 		"libraries": {},
@@ -90,12 +85,12 @@
 		"remappings": []
 	},
 	"sources": {
-		"contracts/prac13.sol": {
-			"keccak256": "0x20b9cc90cdeb20fb605a786f76297e27b61161d9b31c3586d887423bf55c93dc",
+		"contracts/prac14.sol": {
+			"keccak256": "0xbd6bb97ea060e8eddcfdcc966b1b9aa1a744f12f12099151cf7b8a0bd25d20c3",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://2544ea2f31ed5a2b9b00faa39c6433e5c2c6e59922b5193270ebf096b2a019cb",
-				"dweb:/ipfs/QmcjP17FZeQMdVoWq4pwBnVYnWVLQt2oQPyruiKgv4TWR5"
+				"bzz-raw://a9477a378f4c7d9069b2fcd177dd2e124ab7575e20d7abed4f536d16b18fcf65",
+				"dweb:/ipfs/QmajDnyDBRt2sfsBCxZdavaxY6AzvPqtxsBfvdSbEBDA47"
 			]
 		}
 	},

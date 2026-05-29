@@ -12,7 +12,7 @@
 			},
 			{
 				"inputs": [],
-				"name": "getNumber",
+				"name": "getValue",
 				"outputs": [
 					{
 						"internalType": "uint256",
@@ -24,16 +24,16 @@
 				"type": "function"
 			},
 			{
-				"inputs": [],
-				"name": "number",
-				"outputs": [
+				"inputs": [
 					{
 						"internalType": "uint256",
-						"name": "",
+						"name": "_amount",
 						"type": "uint256"
 					}
 				],
-				"stateMutability": "view",
+				"name": "increaseValue",
+				"outputs": [],
+				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
@@ -53,13 +53,26 @@
 				"inputs": [
 					{
 						"internalType": "uint256",
-						"name": "_number",
+						"name": "_newValue",
 						"type": "uint256"
 					}
 				],
-				"name": "setNumber",
+				"name": "updateValue",
 				"outputs": [],
 				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "value",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
 				"type": "function"
 			}
 		],
@@ -76,7 +89,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/prac13.sol": "DeploymentReset"
+			"contracts/prac14.sol": "StateMutationFixed"
 		},
 		"evmVersion": "osaka",
 		"libraries": {},
@@ -90,12 +103,12 @@
 		"remappings": []
 	},
 	"sources": {
-		"contracts/prac13.sol": {
-			"keccak256": "0x20b9cc90cdeb20fb605a786f76297e27b61161d9b31c3586d887423bf55c93dc",
+		"contracts/prac14.sol": {
+			"keccak256": "0xefcb94004b410bd54111921f2fdeb3c951eda126bec0698f5980966ff5c4de7f",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://2544ea2f31ed5a2b9b00faa39c6433e5c2c6e59922b5193270ebf096b2a019cb",
-				"dweb:/ipfs/QmcjP17FZeQMdVoWq4pwBnVYnWVLQt2oQPyruiKgv4TWR5"
+				"bzz-raw://f2f2c86786fa60f4b31875df7e2ae16b0ab1c2db75f838609b7aa27d7048ccd3",
+				"dweb:/ipfs/QmeaJog1PqUwfUwPczUqoSPqk2YJCHEfZrvLhFwSBS4YM3"
 			]
 		}
 	},

@@ -12,6 +12,32 @@
 			},
 			{
 				"inputs": [],
+				"name": "deployedAt",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "deployer",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
 				"name": "getNumber",
 				"outputs": [
 					{
@@ -31,19 +57,6 @@
 						"internalType": "uint256",
 						"name": "",
 						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "owner",
-				"outputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
 					}
 				],
 				"stateMutability": "view",
@@ -76,7 +89,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/prac13.sol": "DeploymentReset"
+			"contracts/prac13.sol": "DeploymentResetMin"
 		},
 		"evmVersion": "osaka",
 		"libraries": {},

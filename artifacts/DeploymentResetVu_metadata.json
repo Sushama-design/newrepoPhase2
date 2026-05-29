@@ -7,11 +7,6 @@
 		"abi": [
 			{
 				"inputs": [],
-				"stateMutability": "nonpayable",
-				"type": "constructor"
-			},
-			{
-				"inputs": [],
 				"name": "getNumber",
 				"outputs": [
 					{
@@ -31,19 +26,6 @@
 						"internalType": "uint256",
 						"name": "",
 						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "owner",
-				"outputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
 					}
 				],
 				"stateMutability": "view",
@@ -76,7 +58,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/prac13.sol": "DeploymentReset"
+			"contracts/prac13.sol": "DeploymentResetVu"
 		},
 		"evmVersion": "osaka",
 		"libraries": {},
@@ -91,11 +73,11 @@
 	},
 	"sources": {
 		"contracts/prac13.sol": {
-			"keccak256": "0x20b9cc90cdeb20fb605a786f76297e27b61161d9b31c3586d887423bf55c93dc",
+			"keccak256": "0x146d3ad05275ebe486734922c145522d76daf257491d494180aa5df2909b2558",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://2544ea2f31ed5a2b9b00faa39c6433e5c2c6e59922b5193270ebf096b2a019cb",
-				"dweb:/ipfs/QmcjP17FZeQMdVoWq4pwBnVYnWVLQt2oQPyruiKgv4TWR5"
+				"bzz-raw://8c2a5d8aee617475645ef83f921577bac3294151a5a4509c828f36b446376178",
+				"dweb:/ipfs/QmaakXNkRTPPq5XR9F7afVXbPkfFuCbDhvWSSKzyeNkhS6"
 			]
 		}
 	},

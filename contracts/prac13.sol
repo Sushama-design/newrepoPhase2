@@ -63,7 +63,7 @@ Auditors inspect:
 =========================================================
 */
 
-contract DeploymentReset {
+contract DeploymentResetVul {
 
     uint256 public number;
 
@@ -366,3 +366,144 @@ IMPORTANT CONCEPTS LEARNED
 
 =========================================================
 */
+
+
+/*
+
+======================== Audit Report ========================
+
+Title: Missing Access Control in setNumber()
+
+Severity: Medium
+
+Reason: Any external user can modify critical contract state without authorization.
+
+Location:
+
+Contract: DeploymentReset
+Function: setNumber()
+
+Vulnerability Description:
+
+The setNumber() function allows any external caller to overwrite the number state variable because no access control mechanism is implemented.
+
+Any user interacting with the contract can arbitrarily change stored protocol state.
+
+Although this example is simple, in real protocols similar variables often control:
+
+* treasury parameters
+* protocol configuration
+* pricing logic
+* governance settings
+* feature flags
+
+Unauthorized modification of such values can lead to severe protocol manipulation.
+
+Impact:
+
+An attacker can:
+
+* overwrite contract state
+* manipulate protocol behavior
+* disrupt expected system logic
+* invalidate trusted configuration values
+
+If integrated into larger systems, this issue may lead to operational failure or financial loss.
+
+Proof of Concept:
+
+1. Deploy the contract.
+
+2. Legitimate user calls:
+setNumber(100);
+
+3. Attacker calls:
+setNumber(999999);
+
+4. Observe:
+getNumber()
+
+The stored value changes successfully without restriction.
+
+Root Cause:
+
+The function is declared public without validating the caller identity.
+
+No authorization checks exist before modifying state.
+
+Recommendation:
+
+Restrict state-changing functionality to authorized users.
+
+Example:
+require(msg.sender == owner, "Not owner");
+*/
+
+ //--------------------- PATCH CODE ---------------------------
+
+
+contract DeploymentReset {
+
+    uint256 public number;
+
+    address public owner;
+
+    constructor() {
+
+        // PATCH ADDED:
+        // Store contract deployer as authorized owner
+        owner = msg.sender;
+    }
+
+    function setNumber(uint256 _number) public {
+
+        // PATCH ADDED:
+        // Prevent unauthorized state modification
+        // Restricts sensitive updates to owner only
+        require(msg.sender == owner, "Not owner");
+
+        number = _number;
+    }
+
+    function getNumber() public view returns (uint256) {
+
+        return number;
+    }
+}
+
+//==================== MINI CHALLENGE CODE ========================== 
+
+
+contract DeploymentResetMin {
+
+    uint256 public number;
+
+    // PATCH ADDED:
+    // Store contract deployer address
+    address public deployer;
+
+    // PATCH ADDED:
+    // Store deployment timestamp
+    uint256 public deployedAt;
+
+    constructor() {
+
+        // PATCH ADDED:
+        // Save deployer address during deployment
+        deployer = msg.sender;
+
+        // PATCH ADDED:
+        // Save deployment time
+        deployedAt = block.timestamp;
+    }
+
+    function setNumber(uint256 _number) public {
+
+        number = _number;
+    }
+
+    function getNumber() public view returns (uint256) {
+
+        return number;
+    }
+}
