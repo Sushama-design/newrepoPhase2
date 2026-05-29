@@ -75,8 +75,8 @@ Auditors check:
 
 =========================================================
 */
-/*
-contract ArrayStorage {
+
+contract ArrayStorageVul {
 
     uint256[] public numbers;
 
@@ -93,7 +93,7 @@ contract ArrayStorage {
         return numbers.length;
     }
 }
-*/
+
 /*
 =========================================================
 EXECUTION FLOW
@@ -376,31 +376,6 @@ Modify contract so that:
 BONUS:
 Prevent removing from empty array.
 
-*/
-
-
-contract ArrayStorage {
-
-    uint256[] public numbers;
-
-    function addNumber( uint256 _number ) public {
-        numbers.push(_number);
-    }
-
-    function removeLastNumber() public {
-        require( numbers.length > 0, "Array is empty" );
-
-        numbers.pop();
-    }
-
-    function getNumber( uint256 _index ) public view returns (uint256) {
-        return numbers[_index];
-    }
-
-    function getLength() public view returns (uint256){
-        return numbers.length;
-    }
-}
 
 /*
 =========================================================
@@ -420,3 +395,172 @@ IMPORTANT CONCEPTS LEARNED
 
 =========================================================
 */
+
+/*
+
+======================== Audit Report ========================
+
+
+Title: Unrestricted Dynamic Array Storage Growth
+
+Severity: Medium
+
+Reason: Any external user can continuously expand contract storage, causing permanent state bloat and increased gas costs.
+
+Location:
+
+Contract: ArrayStorageVul
+Function: addNumber()
+
+Vulnerability Description:
+
+The addNumber() function allows any external caller to push unlimited values into the numbers dynamic array.
+
+Because blockchain storage is permanent and expensive, unrestricted array growth enables attackers to continuously consume protocol storage resources.
+
+The contract lacks:
+
+* maximum array length validation
+* access control
+* storage limitation mechanisms
+
+This creates a storage-bloat vulnerability.
+
+Impact:
+
+An attacker can:
+
+* indefinitely increase contract storage usage
+* raise long-term operational gas costs
+* degrade scalability
+* create future denial-of-service risks if iteration logic is later added
+
+If future functions iterate over numbers, excessive array growth may eventually cause gas-limit failures.
+
+Proof of Concept:
+
+1. Deploy the contract.
+
+2. Repeatedly call:
+addNumber(999);
+
+3. Observe:
+getLength()
+
+The array length continuously increases without restriction.
+
+An attacker can automate repeated transactions to permanently bloat contract state.
+
+Root Cause:
+
+The contract permits unrestricted writes to a dynamic storage array without enforcing:
+
+* size limits
+* authorization checks
+* storage management controls
+
+Recommendation:
+
+Implement:
+
+* maximum array size restrictions
+* access control
+* bounded storage architecture
+* off-chain indexing where possible
+
+Example:
+
+require(numbers.length < MAX_SIZE, "Array limit reached");
+
+ //--------------------- PATCH CODE ---------------------------
+
+*/
+
+contract ArrayStorageFixed {
+
+    uint256[] public numbers;
+
+    // PATCH ADDED:
+    // Define maximum allowed array size
+    // Prevents unlimited storage growth
+    uint256 public constant MAX_SIZE = 10;
+
+    address public owner;
+
+    constructor() {
+        owner = msg.sender;
+    }
+
+    function addNumber(uint256 _number) public {
+
+        // PATCH ADDED:
+        // Restrict unauthorized storage modification
+        require(msg.sender == owner, "Not owner");
+
+        // PATCH ADDED:
+        // Prevent unbounded array expansion
+        // Protect against storage-bloat attacks
+        require(
+            numbers.length < MAX_SIZE,
+            "Array limit reached"
+        );
+
+        numbers.push(_number);
+    }
+
+    function getNumber(uint256 _index)
+        public
+        view
+        returns (uint256)
+    {
+
+        // PATCH ADDED:
+        // Prevent invalid index access
+        require(_index < numbers.length, "Invalid index");
+
+        return numbers[_index];
+    }
+
+    function getLength() public view returns (uint256) {
+        return numbers.length;
+    }
+}
+
+//==================== MINI CHALLENGE CODE ========================== 
+
+contract ArrayStorageFixedMin {
+
+    uint256[] public numbers;
+
+    function addNumber(uint256 _number) public {
+        numbers.push(_number);
+    }
+
+    // PATCH ADDED:
+    // Allows removing the last array element
+    // Helps control unnecessary storage growth
+    function removeLastNumber() public {
+
+        // PATCH ADDED:
+        // Prevent popping from empty array
+        // Avoids transaction revert due to invalid pop()
+        require(numbers.length > 0, "Array is empty");
+
+        // PATCH ADDED:
+        // Remove last element from storage array
+        numbers.pop();
+    }
+
+    function getNumber(uint256 _index) public view returns (uint256) {
+
+        // PATCH ADDED:
+        // Prevent invalid index access
+        require(_index < numbers.length, "Invalid index");
+
+        return numbers[_index];
+    }
+
+    function getLength() public view returns (uint256) {
+        return numbers.length;
+    }
+}

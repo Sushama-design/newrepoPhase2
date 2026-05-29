@@ -6,6 +6,24 @@
 	"output": {
 		"abi": [
 			{
+				"inputs": [],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"inputs": [],
+				"name": "MAX_SIZE",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
 				"inputs": [
 					{
 						"internalType": "uint256",
@@ -71,9 +89,15 @@
 			},
 			{
 				"inputs": [],
-				"name": "removeLastNumber",
-				"outputs": [],
-				"stateMutability": "nonpayable",
+				"name": "owner",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
 				"type": "function"
 			}
 		],
@@ -90,7 +114,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/prac7.sol": "ArrayStorage"
+			"contracts/prac7.sol": "ArrayStorageFixed"
 		},
 		"evmVersion": "osaka",
 		"libraries": {},
@@ -105,11 +129,11 @@
 	},
 	"sources": {
 		"contracts/prac7.sol": {
-			"keccak256": "0x873695435be24881f388a87356c4d835f25e13d7bb654a949e5cd331ce58125e",
+			"keccak256": "0x112aab931a1917359b8cf818bed4d0ef72b58003ce5c21a22eaae130d5d247ab",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://5b780142fd396a609d2b93a90a0edb0b0babb4a3f598036e8a88d3cab609dc5c",
-				"dweb:/ipfs/QmcHrxKiF6rSMkN1JWst7m3mGdmuRZfeCzg6M4inPTY1Zy"
+				"bzz-raw://4f822006097eb84eb35e7af0cfe032fdc5e5fa189661e6bdf36b7b15e0d78a13",
+				"dweb:/ipfs/QmVK36xEpsv21uK2eZfhVgDg7sc9HTSCzEmuVLjeb8v53G"
 			]
 		}
 	},
