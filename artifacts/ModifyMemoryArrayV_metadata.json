@@ -83,7 +83,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/prac19.sol": "ModifyMemoryArray"
+			"contracts/prac19.sol": "ModifyMemoryArrayV"
 		},
 		"evmVersion": "osaka",
 		"libraries": {},
@@ -98,11 +98,11 @@
 	},
 	"sources": {
 		"contracts/prac19.sol": {
-			"keccak256": "0x426c0895ed9a87252751903b710182ca4361ef0e656cf9706c46bab9da5360a3",
+			"keccak256": "0xc64a04045a6b4fdd5c6c786a7ce0e713c7cbba3abe2274780a36dc65f341ba62",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://00510bb93e93c36eaf341aa35be541651f5442639609ed1b9e1071378cd2fb7b",
-				"dweb:/ipfs/Qmc1S36NPdyUWZhnCaz49ehjPGgBa9QorRsRFNCBZ6UM1a"
+				"bzz-raw://ca934a499e279fcbd2ac5692ff8ef2fe2dba948cb25326113513f240a869dcbc",
+				"dweb:/ipfs/QmZYGZQ7t3XR27eaNYR7NNPZxrTP1Lh7AV92VFTZjFATwR"
 			]
 		}
 	},

@@ -71,7 +71,7 @@ Auditors inspect:
 =========================================================
 */
 
-contract ModifyMemoryArray {
+contract ModifyMemoryArrayVul {
 
     uint256[] public storedNumbers;
 
@@ -426,3 +426,165 @@ IMPORTANT CONCEPTS LEARNED
 
 =========================================================
 */
+
+/*
+
+======================== Audit Report ========================
+
+
+Title: Unrestricted Storage Array Growth Through storeValue()
+
+Severity: Medium
+
+Reason: Any external user can permanently expand blockchain storage without restriction.
+
+Location:
+
+Contract: ModifyMemoryArrayVul
+Function: storeValue()
+
+Vulnerability Description:
+
+The contract correctly demonstrates mutable memory-array behavior, but the storeValue() function 
+allows unrestricted writes to the storedNumbers storage array.
+
+Any external caller can continuously execute:
+
+storedNumbers.push(_value);
+
+causing permanent storage growth on-chain.
+
+Memory arrays such as:
+
+uint256[] memory tempArray
+
+exist temporarily and disappear after execution, but storage arrays persist permanently and consume expensive blockchain storage resources.
+
+The contract lacks:
+
+* maximum array size limits
+* authorization checks
+* storage management protections
+
+This creates a storage-bloat vulnerability.
+
+Impact:
+
+An attacker can:
+
+* continuously inflate contract storage
+* increase gas costs
+* degrade scalability
+* create future denial-of-service risks if loops are later added over storedNumbers
+
+Large unbounded storage arrays are a common gas-risk pattern auditors monitor carefully.
+
+Proof of Concept:
+
+1. Deploy the contract.
+
+2. Repeatedly call:
+
+storeValue(123);
+
+3. Observe permanent storage growth through:
+
+storedNumbers(index)
+
+The array grows indefinitely without restriction.
+
+Root Cause:
+
+The contract exposes unrestricted writes to a dynamic storage array.
+
+No controls exist for:
+
+* authorized callers
+* storage limits
+* state growth management
+
+Recommendation:
+
+Implement:
+
+* access control
+* maximum array length validation
+* bounded storage architecture
+
+Example:
+
+require(storedNumbers.length < MAX_SIZE, "Limit reached");
+*/
+
+ //--------------------- PATCH CODE ---------------------------
+
+
+contract ModifyMemoryArrayFixed {
+
+    uint256[] public storedNumbers;
+
+    // PATCH ADDED:
+    // Define maximum allowed storage size
+    uint256 public constant MAX_SIZE = 10;
+
+    address public owner;
+
+    constructor() {
+
+        // PATCH ADDED:
+        // Store authorized owner
+        owner = msg.sender;
+    }
+
+    function createAndModifyArray() public pure returns (uint256[] memory)
+    {
+        /*
+            MEMORY ARRAY
+
+            Temporary mutable array.
+        */
+        uint256[] memory tempArray = new uint256[](3);
+
+        tempArray[0] = 1;
+        tempArray[1] = 2;
+        tempArray[2] = 3;
+        /*
+            MEMORY MODIFICATION
+
+            Changes affect only temporary memory.
+        */
+        tempArray[1] = 999;
+        return tempArray;
+    }
+
+    function modifyInputArray(uint256[] memory _numbers) public pure returns (uint256[] memory)
+    {
+        // PATCH ADDED:
+        // Prevent invalid empty array access
+        require(_numbers.length > 0, "Empty array");
+        /*
+            Modify temporary memory copy only.
+        */
+        _numbers[0] = 777;
+
+        return _numbers;
+    }
+
+    function storeValue(uint256 _value) public {
+
+        // PATCH ADDED:
+        // Restrict unauthorized storage writes
+        require(msg.sender == owner, "Not owner");
+
+        // PATCH ADDED:
+        // Prevent unlimited storage growth
+        require( storedNumbers.length < MAX_SIZE, "Array limit reached" );
+        /*
+            STORAGE WRITE
+
+            Persists permanently on blockchain.
+        */
+        storedNumbers.push(_value);
+    }
+}
+

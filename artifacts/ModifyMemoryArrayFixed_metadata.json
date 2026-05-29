@@ -7,6 +7,24 @@
 		"abi": [
 			{
 				"inputs": [],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"inputs": [],
+				"name": "MAX_SIZE",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
 				"name": "createAndModifyArray",
 				"outputs": [
 					{
@@ -35,6 +53,19 @@
 					}
 				],
 				"stateMutability": "pure",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "owner",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
 				"type": "function"
 			},
 			{
@@ -83,7 +114,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/prac19.sol": "ModifyMemoryArray"
+			"contracts/prac19.sol": "ModifyMemoryArrayFixed"
 		},
 		"evmVersion": "osaka",
 		"libraries": {},
@@ -98,11 +129,11 @@
 	},
 	"sources": {
 		"contracts/prac19.sol": {
-			"keccak256": "0x426c0895ed9a87252751903b710182ca4361ef0e656cf9706c46bab9da5360a3",
+			"keccak256": "0x878aeda3d6baa3d5d085e43f110939ab3137661711234b0fd08f27e7bad5bb00",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://00510bb93e93c36eaf341aa35be541651f5442639609ed1b9e1071378cd2fb7b",
-				"dweb:/ipfs/Qmc1S36NPdyUWZhnCaz49ehjPGgBa9QorRsRFNCBZ6UM1a"
+				"bzz-raw://d7a6e2efd91846d318cf65a9156f4c318d1bd554c7ad370376606f73a23392f9",
+				"dweb:/ipfs/QmVdDn7KhvoJxWyLA6fL83SxJ3gi2dcMgYfq31seHL3Deo"
 			]
 		}
 	},
