@@ -8,12 +8,12 @@
 			{
 				"inputs": [
 					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
+						"internalType": "uint256",
+						"name": "_number",
+						"type": "uint256"
 					}
 				],
-				"name": "balances",
+				"name": "doubleInput",
 				"outputs": [
 					{
 						"internalType": "uint256",
@@ -21,40 +21,52 @@
 						"type": "uint256"
 					}
 				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "deleteMyBalance",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "getMyBalance",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
+				"stateMutability": "pure",
 				"type": "function"
 			},
 			{
 				"inputs": [
 					{
 						"internalType": "uint256",
-						"name": "_amount",
+						"name": "_number",
 						"type": "uint256"
 					}
 				],
-				"name": "setBalance",
+				"name": "readInput",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "pure",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_number",
+						"type": "uint256"
+					}
+				],
+				"name": "saveInput",
 				"outputs": [],
 				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "storedNumber",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
 				"type": "function"
 			}
 		],
@@ -71,7 +83,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/prac10.sol": "DeleteMappingEntry"
+			"contracts/prac26.sol": "CalldataUintInput"
 		},
 		"evmVersion": "osaka",
 		"libraries": {},
@@ -85,12 +97,12 @@
 		"remappings": []
 	},
 	"sources": {
-		"contracts/prac10.sol": {
-			"keccak256": "0x4d67271fd1cee0dfa90e470ad75758b43ca51985daaa2d533c068e504548477b",
+		"contracts/prac26.sol": {
+			"keccak256": "0xa636ef6f0cca4cb959d01ba7150dca131ebeda794adbc11f4106cc48e29137d8",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://cc4b5aaa4cf67580eb934b471938db14a31da8b7aae939258ac8baf1d41dbf5b",
-				"dweb:/ipfs/QmQ6WQ4s2aj4RSdi6gXJBxNh3uSbAYhbKdbqWm2uhtrmSp"
+				"bzz-raw://24d25ca1269c6806b57a3974d84ed42e3e1153e87e2dbcc2e100a1b94340d60a",
+				"dweb:/ipfs/QmQkb2VTLa1zAEeRucNXrkYhCFVAW3c7mFNyHMA563vLLU"
 			]
 		}
 	},

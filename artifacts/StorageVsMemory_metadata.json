@@ -7,32 +7,20 @@
 		"abi": [
 			{
 				"inputs": [],
-				"stateMutability": "nonpayable",
-				"type": "constructor"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "_user",
-						"type": "address"
-					}
-				],
-				"name": "addToWhitelist",
+				"name": "createUser",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "_user",
-						"type": "address"
-					}
-				],
-				"name": "isWhitelisted",
+				"inputs": [],
+				"name": "getUser",
 				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					},
 					{
 						"internalType": "bool",
 						"name": "",
@@ -44,26 +32,25 @@
 			},
 			{
 				"inputs": [],
-				"name": "owner",
+				"name": "updateUsingMemory",
 				"outputs": [
 					{
-						"internalType": "address",
+						"internalType": "uint256",
 						"name": "",
-						"type": "address"
+						"type": "uint256"
+					},
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
 					}
 				],
 				"stateMutability": "view",
 				"type": "function"
 			},
 			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "_user",
-						"type": "address"
-					}
-				],
-				"name": "removeFromWhitelist",
+				"inputs": [],
+				"name": "updateUsingStorage",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -76,11 +63,16 @@
 						"type": "address"
 					}
 				],
-				"name": "whitelist",
+				"name": "users",
 				"outputs": [
 					{
+						"internalType": "uint256",
+						"name": "score",
+						"type": "uint256"
+					},
+					{
 						"internalType": "bool",
-						"name": "",
+						"name": "active",
 						"type": "bool"
 					}
 				],
@@ -101,7 +93,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/prac10.sol": "DeleteMappingEntryMin"
+			"contracts/prac23.sol": "StorageVsMemory"
 		},
 		"evmVersion": "osaka",
 		"libraries": {},
@@ -115,12 +107,12 @@
 		"remappings": []
 	},
 	"sources": {
-		"contracts/prac10.sol": {
-			"keccak256": "0x4d67271fd1cee0dfa90e470ad75758b43ca51985daaa2d533c068e504548477b",
+		"contracts/prac23.sol": {
+			"keccak256": "0x4fdf6904569523e3dd7ee226ba0defce0c5d7228c90ee4c746709818d7f81cb5",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://cc4b5aaa4cf67580eb934b471938db14a31da8b7aae939258ac8baf1d41dbf5b",
-				"dweb:/ipfs/QmQ6WQ4s2aj4RSdi6gXJBxNh3uSbAYhbKdbqWm2uhtrmSp"
+				"bzz-raw://a14b1878bcbc3ff57b6fb236dffbdd5690c1155bcf9c69be37b792c7bfb2e0b4",
+				"dweb:/ipfs/QmRxXbNYfcDAgdWJWWEQ6tF9j4r5QPfNWwUJN9wFHA6F2f"
 			]
 		}
 	},

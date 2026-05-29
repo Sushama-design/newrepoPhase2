@@ -11,32 +11,57 @@
 				"type": "constructor"
 			},
 			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "_user",
-						"type": "address"
-					}
-				],
-				"name": "addToWhitelist",
+				"inputs": [],
+				"name": "addValues",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "_user",
-						"type": "address"
-					}
-				],
-				"name": "isWhitelisted",
+				"inputs": [],
+				"name": "getStorageArray",
 				"outputs": [
 					{
-						"internalType": "bool",
+						"internalType": "uint256[]",
 						"name": "",
-						"type": "bool"
+						"type": "uint256[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "modifyMemoryCopy",
+				"outputs": [
+					{
+						"internalType": "uint256[]",
+						"name": "",
+						"type": "uint256[]"
+					},
+					{
+						"internalType": "uint256[]",
+						"name": "",
+						"type": "uint256[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "numbers",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
 					}
 				],
 				"stateMutability": "view",
@@ -50,38 +75,6 @@
 						"internalType": "address",
 						"name": "",
 						"type": "address"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "_user",
-						"type": "address"
-					}
-				],
-				"name": "removeFromWhitelist",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"name": "whitelist",
-				"outputs": [
-					{
-						"internalType": "bool",
-						"name": "",
-						"type": "bool"
 					}
 				],
 				"stateMutability": "view",
@@ -101,7 +94,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/prac10.sol": "DeleteMappingEntryMin"
+			"contracts/prac21.sol": "ModifyCopiedMemoryArray"
 		},
 		"evmVersion": "osaka",
 		"libraries": {},
@@ -115,12 +108,12 @@
 		"remappings": []
 	},
 	"sources": {
-		"contracts/prac10.sol": {
-			"keccak256": "0x4d67271fd1cee0dfa90e470ad75758b43ca51985daaa2d533c068e504548477b",
+		"contracts/prac21.sol": {
+			"keccak256": "0x85aa01194d8fb0d02bb8501830a6fa4c0152960f22680ddbaf4b3484c9db9e6f",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://cc4b5aaa4cf67580eb934b471938db14a31da8b7aae939258ac8baf1d41dbf5b",
-				"dweb:/ipfs/QmQ6WQ4s2aj4RSdi6gXJBxNh3uSbAYhbKdbqWm2uhtrmSp"
+				"bzz-raw://f012ff6ac8ceffa18ca77ee93cc6b633b47d815edcd99ede9de36eaaf294314d",
+				"dweb:/ipfs/Qme6F9uWL4JxSvTrqXYbtnCkr2m1R9PkdXHEK4eh9WCWML"
 			]
 		}
 	},
