@@ -77,7 +77,7 @@ Auditors inspect:
 =========================================================
 */
 
-contract MemoryArray {
+contract MemoryArrayVul {
 
     uint256[] public storedNumbers;
 
@@ -439,3 +439,212 @@ IMPORTANT CONCEPTS LEARNED
 
 =========================================================
 */
+
+
+/*
+
+======================== Audit Report ========================
+
+
+Title: Unrestricted Persistent Storage Array Growth
+
+Severity: Medium
+
+Reason: Any external user can continuously increase persistent blockchain storage through storeValue().
+
+Location:
+
+Contract: MemoryArrayVul
+Function: storeValue()
+
+Vulnerability Description:
+
+The contract correctly demonstrates memory-array usage, but the storeValue() function allows unrestricted writes to the storedNumbers storage array.
+
+Any external caller can repeatedly execute:
+
+storedNumbers.push(_value);
+
+causing permanent blockchain storage growth.
+
+Unlike memory arrays created with:
+new uint256[](3)
+
+which disappear after execution, storage arrays persist permanently and consume expensive on-chain storage resources.
+
+The contract lacks:
+
+* array size limitations
+* access control
+* storage management protections
+
+This creates a storage-bloat vulnerability.
+
+Impact:
+
+An attacker can:
+
+* continuously expand contract storage
+* increase protocol gas costs
+* create long-term state bloat
+* degrade scalability
+
+If future protocol upgrades iterate over storedNumbers, excessive growth may later introduce gas-limit denial-of-service risks.
+
+Proof of Concept:
+
+1. Deploy the contract.
+
+2. Repeatedly call:
+storeValue(999);
+
+3. Observe storage growth through:
+storedNumbers(index)
+
+The array expands indefinitely without restriction.
+
+Root Cause:
+
+The contract exposes unrestricted writes to a dynamic storage array.
+
+No validation exists for:
+
+* maximum storage size
+* authorized callers
+* storage growth management
+
+Recommendation:
+
+Implement:
+
+* maximum array size limits
+* access control
+* bounded storage architecture
+* storage cleanup strategy
+
+Example:
+
+require(storedNumbers.length < MAX_SIZE, "Limit reached");
+
+*/
+
+ //--------------------- PATCH CODE ---------------------------
+
+
+contract MemoryArrayFixed {
+
+    uint256[] public storedNumbers;
+
+    // PATCH ADDED:
+    // Define maximum storage array size
+    uint256 public constant MAX_SIZE = 10;
+
+    address public owner;
+
+    constructor() {
+
+        // PATCH ADDED:
+        // Store authorized owner
+        owner = msg.sender;
+    }
+
+    function createMemoryArray() public pure returns (uint256[] memory)
+    {
+        /*
+            MEMORY ARRAY
+
+            Temporary array existing only during execution.
+        */
+        uint256[] memory tempArray = new uint256[](3);
+
+        tempArray[0] = 10;
+        tempArray[1] = 20;
+        tempArray[2] = 30;
+
+        return tempArray;
+    }
+
+    function calculateSquares(uint256 _number) public pure returns (uint256[] memory) {
+        /*
+            Temporary memory array
+        */
+        uint256[] memory squares = new uint256[](3);
+
+        squares[0] = _number;
+        squares[1] = _number * _number;
+        squares[2] = _number * _number * _number;
+
+        return squares;
+    }
+
+    function storeValue(uint256 _value) public {
+
+        // PATCH ADDED:
+        // Restrict unauthorized storage writes
+        require(msg.sender == owner, "Not owner");
+
+        // PATCH ADDED:
+        // Prevent unlimited storage growth
+        require( storedNumbers.length < MAX_SIZE, "Array limit reached" );
+        /*
+            STORAGE ARRAY
+
+            Persists permanently on blockchain.
+        */
+        storedNumbers.push(_value);
+    }
+}
+
+//==================== MINI CHALLENGE CODE ========================== 
+
+
+contract MemoryArrayFixedMin {
+
+    // BONUS PATCH:
+    // Persistent storage array
+    // Storage writes are expensive
+    uint256[] public storedNumbers;
+
+    function createMultipliedArray(uint256 _number) public pure returns (uint256[] memory){
+        /*
+            MEMORY ARRAY
+
+            Temporary array with fixed size = 5
+
+            Exists only during execution.
+        */
+        uint256[] memory multipliedValues = new uint256[](5);
+        /*
+            LOOP THROUGH MEMORY ARRAY
+
+            Fill array with multiplied values.
+        */
+        for (uint256 i = 0; i < 5; i++) {
+            /*
+                Store multiplication results:
+
+                index 0 -> _number * 1
+                index 1 -> _number * 2
+                ...
+            */
+            multipliedValues[i] = _number * (i + 1);
+        }
+        /*
+            Return temporary memory array.
+
+            Array disappears after execution completes.
+        */
+        return multipliedValues;
+    }
+
+    // BONUS PATCH:
+    // Demonstrates expensive storage writes
+    function storeValue(uint256 _value) public {
+        /*
+            STORAGE ARRAY
+
+            Persists permanently on blockchain.
+        */
+        storedNumbers.push(_value);
+    }
+}
