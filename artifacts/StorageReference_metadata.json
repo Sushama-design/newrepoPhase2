@@ -75,6 +75,11 @@
 						"internalType": "bool",
 						"name": "active",
 						"type": "bool"
+					},
+					{
+						"internalType": "bool",
+						"name": "exists",
+						"type": "bool"
 					}
 				],
 				"stateMutability": "view",
@@ -109,11 +114,11 @@
 	},
 	"sources": {
 		"contracts/prac15.sol": {
-			"keccak256": "0x28b167badd424f9ec9642332807235ae542f11ef40b3ac90787712caf4c15e0a",
+			"keccak256": "0x51f5c2ea6be159f65e0d7083cf8d1db737b40829f9ae3e6b6523675f125ed44f",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://e27c4b52e69a66b5ff16b0416a9c2f7a49ff993540748090bd08964d6ade04a9",
-				"dweb:/ipfs/QmX5Nvx92wd1D1uAoZ1tU8hFXrveChzRyP5e72vRZ8Evtg"
+				"bzz-raw://b0a1222bbfc2ce5c93f1434a80ce12e5c8b1c14384c1421378882a5d67b79f2b",
+				"dweb:/ipfs/QmdeYL44MosvBTBxxScqUia5fziYNA2hhrdUBfBFzoifFH"
 			]
 		}
 	},

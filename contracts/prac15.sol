@@ -83,7 +83,7 @@ Auditors inspect:
 =========================================================
 */
 
-contract StorageReference {
+contract StorageReferenceVul {
 
     struct User {
 
@@ -417,3 +417,233 @@ IMPORTANT CONCEPTS LEARNED
 
 =========================================================
 */
+
+/*
+
+======================== Audit Report ========================
+
+
+Title: Missing User Existence Validation Before Storage Mutation
+
+Severity: Low
+
+Reason: Functions mutate storage references without verifying whether a valid user profile exists.
+
+Location:
+
+Contract: StorageReference
+Function: updateAge()
+Function: deactivateUser()
+
+Vulnerability Description:
+
+The contract uses storage reference variables correctly, but state-mutating functions do not validate whether a user has been initialized before modifying storage.
+
+Functions such as:
+
+* updateAge()
+* deactivateUser()
+
+directly create storage references to:
+
+users[msg.sender]
+
+If the user was never created through createUser(), Solidity automatically initializes default values in storage:
+
+* age = 0
+* active = false
+
+This allows unintended state mutation on uninitialized user records.
+
+Although not critical in this simple example, this pattern becomes dangerous in production systems where user existence determines:
+
+* access rights
+* staking eligibility
+* KYC status
+* governance participation
+* reward accounting
+
+Impact:
+
+An attacker or unintended user can:
+
+* mutate uninitialized storage entries
+* create partially initialized user states
+* bypass expected workflow assumptions
+
+This may lead to inconsistent protocol state and logic errors in larger systems.
+
+Proof of Concept:
+
+1. Deploy the contract.
+
+2. Without calling:
+createUser(...)
+
+3. Directly call:
+updateAge(99);
+
+4. Observe:
+getMyData()
+
+The mapping entry becomes partially initialized even though no user creation occurred.
+
+Root Cause:
+
+The contract assumes users already exist before mutating storage references.
+
+No validation checks whether:
+users[msg.sender]
+
+contains initialized user data.
+
+Recommendation:
+
+Track user initialization state before allowing mutations.
+
+Example:
+
+require(user.active == true, "User does not exist");
+
+Alternatively, add a dedicated initialized flag.
+*/
+
+ //--------------------- PATCH CODE ---------------------------
+
+
+contract StorageReference {
+
+    struct User {
+
+        uint256 age;
+
+        bool active;
+
+        // PATCH ADDED:
+        // Track whether user was initialized properly
+        bool exists;
+    }
+
+    mapping(address => User) public users;
+
+    function createUser(uint256 _age) public {
+
+        // PATCH ADDED:
+        // Prevent duplicate user creation
+        require(!users[msg.sender].exists, "User already exists");
+
+        users[msg.sender] = User({
+            age: _age,
+            active: true,
+            exists: true
+        });
+    }
+
+    function updateAge(uint256 _newAge) public {
+
+        User storage user = users[msg.sender];
+
+        // PATCH ADDED:
+        // Ensure valid initialized user exists
+        require(user.exists, "User does not exist");
+
+        user.age = _newAge;
+    }
+
+    function deactivateUser() public {
+
+        User storage user = users[msg.sender];
+
+        // PATCH ADDED:
+        // Prevent mutation of uninitialized records
+        require(user.exists, "User does not exist");
+
+        user.active = false;
+    }
+
+    function getMyData()
+        public
+        view
+        returns (uint256, bool)
+    {
+        User storage user = users[msg.sender];
+
+        return (user.age, user.active);
+    }
+}
+
+//==================== MINI CHALLENGE CODE ========================== 
+
+contract StorageReferenceMin {
+
+    struct User {
+
+        uint256 age;
+
+        bool active;
+
+        // PATCH ADDED:
+        // Track whether user was initialized
+        // Prevents interacting with default empty struct
+        bool exists;
+    }
+
+    mapping(address => User) public users;
+
+    function createUser(uint256 _age) public {
+
+        // PATCH ADDED:
+        // Prevent duplicate user creation
+        require(
+            !users[msg.sender].exists,
+            "User already exists"
+        );
+
+        users[msg.sender] = User({
+            age: _age,
+            active: true,
+            exists: true
+        });
+    }
+
+    // PATCH ADDED:
+    // Demonstrates MEMORY copy behavior
+    // Changes here do NOT affect blockchain storage
+    function testMemoryCopy()
+        public
+        view
+        returns ( uint256 memoryAge, uint256 storageAge )
+    {
+
+        // PATCH ADDED:
+        // Ensure valid initialized user exists
+        require( users[msg.sender].exists, "User does not exist" );
+
+        /*
+            MEMORY COPY
+
+            Creates temporary copy of storage data.
+
+            memoryUser is independent from:
+            users[msg.sender]
+
+            Changes to memoryUser
+            will NOT modify storage.
+        */
+        User memory memoryUser = users[msg.sender];
+
+        // PATCH ADDED:
+        // Modify MEMORY copy only
+        memoryUser.age = 999;
+
+        /*
+            Return both values:
+
+            memoryAge  -> modified temporary value
+            storageAge -> original persistent value
+
+            Demonstrates storage remains unchanged.
+        */
+        return ( memoryUser.age, users[msg.sender].age );
+    }
+}

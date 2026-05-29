@@ -505,7 +505,7 @@ contract StateMutationFixed {
 }
 
 //==================== MINI CHALLENGE CODE ========================== 
-/*
+
 
 contract StateMutationFixedMin {
 
@@ -569,4 +569,3 @@ contract StateMutationFixedMin {
         return value;
     }
 }
-*/

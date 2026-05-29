@@ -6,18 +6,38 @@
 	"output": {
 		"abi": [
 			{
-				"inputs": [],
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_age",
+						"type": "uint256"
+					}
+				],
+				"name": "createUser",
+				"outputs": [],
 				"stateMutability": "nonpayable",
-				"type": "constructor"
+				"type": "function"
 			},
 			{
 				"inputs": [],
-				"name": "getValue",
+				"name": "deactivateUser",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getMyData",
 				"outputs": [
 					{
 						"internalType": "uint256",
 						"name": "",
 						"type": "uint256"
+					},
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
 					}
 				],
 				"stateMutability": "view",
@@ -27,49 +47,34 @@
 				"inputs": [
 					{
 						"internalType": "uint256",
-						"name": "_amount",
+						"name": "_newAge",
 						"type": "uint256"
 					}
 				],
-				"name": "increaseValue",
+				"name": "updateAge",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
-				"inputs": [],
-				"name": "owner",
-				"outputs": [
+				"inputs": [
 					{
 						"internalType": "address",
 						"name": "",
 						"type": "address"
 					}
 				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "_newValue",
-						"type": "uint256"
-					}
-				],
-				"name": "updateValue",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "value",
+				"name": "users",
 				"outputs": [
 					{
 						"internalType": "uint256",
-						"name": "",
+						"name": "age",
 						"type": "uint256"
+					},
+					{
+						"internalType": "bool",
+						"name": "active",
+						"type": "bool"
 					}
 				],
 				"stateMutability": "view",
@@ -89,7 +94,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/prac14.sol": "StateMutationFixed"
+			"contracts/prac15.sol": "StorageReferenceVuk"
 		},
 		"evmVersion": "osaka",
 		"libraries": {},
@@ -103,12 +108,12 @@
 		"remappings": []
 	},
 	"sources": {
-		"contracts/prac14.sol": {
-			"keccak256": "0x357b39f480c73a9310b701b520113a4a2ecfc01f815ae0df34e1d1342adf591a",
+		"contracts/prac15.sol": {
+			"keccak256": "0xbb955e0dc60c3af11009fc84b74fc5c2c9bb473d0ab74fe11bd5e16e04c7e181",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://877616f1d6e802789fa0b7c0104321b9330f8182065faaf78339a549cbbd8d19",
-				"dweb:/ipfs/QmfJybKWxrniMSjEsiSryoVjJTVH99iA4cx4bTNyj6c8uR"
+				"bzz-raw://18c1d722a2b685d6005ddd4d3b596cc46a2921007769adbedd22476207411a1a",
+				"dweb:/ipfs/QmcoKhV2WPgbivrEWNLrpuCgbB4GBBN9kxnx5YUfXBWm2k"
 			]
 		}
 	},
